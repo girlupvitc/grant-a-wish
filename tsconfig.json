@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "target": "es6",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "lib": [
+            "ES2020",
+        ],
+        "module": "ES2015",
+        "declaration": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "./src/**/*.test.ts",
+        "./src/**/*.test.js",
+    ]
+}

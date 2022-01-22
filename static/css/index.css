@@ -1,0 +1,41 @@
+.wishes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.wish {
+    margin: 0.5rem;
+}
+
+.wish-price {
+    margin-top: 1rem;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 0.4rem;
+}
+
+.wish-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wish-title {
+    background: var(--white);
+    color: var(--pink);
+    font-weight: bold;
+    padding: 0.2rem;
+}
+
+.wish-body {
+    padding: 0.2rem;
+    border: 2px solid var(--white);
+    border-top: none;
+}
+
+@media screen and (max-aspect-ratio: 1/1) {
+    .wishes {
+        grid-template-columns: 1fr;
+    }
+}

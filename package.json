@@ -1,0 +1,35 @@
+{
+  "name": "one-simple-wish",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.ts",
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "dev": "npm run build && node ./dist/built.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/girlupvitc/one-simple-wish.git"
+  },
+  "author": "Siddharth Singh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/girlupvitc/one-simple-wish/issues"
+  },
+  "homepage": "https://github.com/girlupvitc/one-simple-wish#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.4.6",
+    "better-sqlite3-session-store": "^0.0.2",
+    "bindings": "^1.5.0",
+    "dotenv": "^14.0.0",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "liquidjs": "^9.32.1",
+    "tsc": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.4.2",
+    "@types/express-session": "^1.17.4",
+    "esbuild": "^0.14.11"
+  }
+}

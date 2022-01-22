@@ -1,0 +1,103 @@
+* {
+    font-display: swap;
+    --pink: rgb(180, 95, 109);
+    --white: white;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--pink);
+    color: var(--white);
+    font-family: 'Lora';
+}
+
+body > .body-content {
+    max-width: calc(65ch - 2rem);
+    width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+
+details {
+    background: var(--pink);
+    color: var(--white);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+    margin: 0.5rem;
+}
+
+.details-body {
+    border: 2px solid var(--white);
+}
+
+summary {
+    background: var(--white);
+    color: var(--pink);
+    padding: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+}
+
+.form-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem;
+}
+
+.submit-group {
+    margin-top: 1rem;
+    justify-content: flex-end;
+}
+
+input:not([type=checkbox]):not([type=file]) {
+    background: var(--white);
+    color: var(--pink);
+    padding: 0.4rem;
+    margin: 0.2rem;
+    border: none;
+    font-family: inherit;
+}
+
+.button, button, input[type=submit] {
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+a, a:link, a:visited {
+    color: var(--white);
+    text-decoration: none;
+}
+
+a.button.button {
+    color: var(--pink);
+    font-size: 0.8rem;
+}
+
+@media not all and (hover: none) {
+    .button:hover, button:hover, input[type=submit]:hover {
+        font-weight: bold;
+    }
+}
