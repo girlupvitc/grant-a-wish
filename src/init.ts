@@ -16,7 +16,7 @@ const initLiquid = (app: express.Express) => {
 }
 
 const initSessions = (app: express.Express) => {
-    const config = app.get('config');
+    const config = app.get('config file');
     const sessionDb = new sqlite('sessions.db');
     sessionDb.pragma('journal_mode = WAL');
 
@@ -54,7 +54,7 @@ const getConfig = () => {
 }
 
 const setupHomepage = (app: express.Express) => {
-    app.use('/', homepage);
+    app.get('/', homepage);
 }
 
 const setupRoutes = (app: express.Express) => {
