@@ -31,7 +31,7 @@
         </span>
         {% endif %}
         <span class='right'>
-            <a href='/cart'>Cart ({{ user.cart.length }} {% if user.cart.length > 1 %}items{% else %}item{% endif
+            <a href='/cart'>Cart ({{ user.cart.length }} {% if user.cart.length != 1 %}items{% else %}item{% endif
                 %})</a>
         </span>
         {% else %}
@@ -89,9 +89,9 @@
 
                     <div class='wish-actions'>
                         {% if user.cart contains wish.uuid %}
-                        <span class='button'>
-                            Already in cart
-                        </span>
+                        <a class='button' href='/cart/remove/{{ wish.uuid }}'>
+                            Remove from cart
+                        </a>
                         {% else %}
                         <a class='button' href='/cart/add/{{ wish.uuid }}'>
                             Add to cart
