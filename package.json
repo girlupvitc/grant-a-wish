@@ -24,11 +24,15 @@
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "liquidjs": "^9.32.1",
+    "passport": "^0.5.2",
+    "passport-google-oauth20": "^2.0.0",
     "tsc": "^2.0.3"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.4.2",
     "@types/express-session": "^1.17.4",
+    "@types/passport": "^1.0.7",
+    "@types/passport-google-oauth20": "^2.0.11",
     "esbuild": "^0.14.11"
   }
 }
