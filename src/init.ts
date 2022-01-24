@@ -9,6 +9,7 @@ import gauthCallback from './routes/auth/auth_callback';
 import logout from './routes/auth/logout';
 import { ensureAdmin, ensureLoggedIn, errorHandler, notFound } from './middleware';
 import admin from './routes/admin/root';
+import bodyParser from 'body-parser';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -76,15 +77,21 @@ const setupErrorHandler = (app: express.Express) => {
     app.use(errorHandler);
 }
 
-const logger = require('express-logging')(require('logops'));
+const setupMiddleware = (app: express.Express) => {
+    const logger = require('express-logging')(require('logops'));
+    app.use(logger);
+    app.use(bodyParser.urlencoded({
+        extended: false
+    }));
+}
 
 export const createApp = () => {
     const app = express();
-    app.use(logger);
+
     const config = getConfig();
     app.set('config file', config);
 
-    [initLiquid, initSessions, setupDb, setupStatic, setupRoutes, setupErrorHandler].forEach(fn => {
+    [initLiquid, initSessions, setupMiddleware, setupDb, setupStatic, setupRoutes, setupErrorHandler].forEach(fn => {
         fn(app);
     })
 
