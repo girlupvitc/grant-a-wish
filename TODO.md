@@ -3,9 +3,6 @@
   - cart page
   - add to cart
 - Profile page
-- make getWishes not put out dummy data
-- make getUserCart work
-- make getUserInfo work
 - order system
 - create admin page
   - add questions
