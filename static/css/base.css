@@ -30,6 +30,25 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
 }
 
+.header {
+    margin-top: 0;
+    height: 1.5rem;
+    padding: 0.25rem;
+    background-color: var(--white);
+    color: var(--pink);
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    max-width: calc(65ch - 2rem);
+}
+
+.header > :last-child {
+    margin-left: auto;
+}
+
+.header.header a {
+    color: inherit;
+}
 
 details {
     background: var(--pink);
