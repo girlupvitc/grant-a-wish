@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
         "allowJs": true,
-        "target": "es6",
+        "target": "es2020",
         "noImplicitAny": true,
         "strictNullChecks": true,
         "lib": [
-            "ES2020",
+            "ESNext",
         ],
-        "module": "es2020",
+        "module": "esnext",
         "declaration": true,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
