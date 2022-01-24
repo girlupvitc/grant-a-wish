@@ -1,5 +1,4 @@
 import express from 'express';
-import 'dotenv/config';
 import { createApp } from './init';
 
 const { config, app } = createApp();

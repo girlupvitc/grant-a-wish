@@ -17,7 +17,7 @@ const initLiquid = (app: express.Express) => {
 
 const initSessions = (app: express.Express) => {
     const config = app.get('config file');
-    const sessionDb = new sqlite('sessions.db');
+    const sessionDb = new sqlite('storage/sessions.db');
     sessionDb.pragma('journal_mode = WAL');
 
     app.use(sessions({
@@ -31,7 +31,7 @@ const initSessions = (app: express.Express) => {
 }
 
 const setupDb = (app: express.Express) => {
-    const database = sqlite('osw.db');
+    const database = sqlite('storage/osw.db');
     database.pragma('journal_mode = WAL');
     app.set('db', database);
 }

@@ -5,7 +5,7 @@
   "main": "src/main.ts",
   "scripts": {
     "build": "node esbuild.config.js",
-    "dev": "npm run build && node ./dist/built.js"
+    "dev": "npm run build && mkdir -p storage && node ./dist/built.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,6 @@
     "better-sqlite3": "^7.4.6",
     "better-sqlite3-session-store": "^0.0.2",
     "bindings": "^1.5.0",
-    "dotenv": "^14.0.0",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "liquidjs": "^9.32.1",
