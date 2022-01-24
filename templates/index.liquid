@@ -31,7 +31,8 @@
         </span>
         {% endif %}
         <span class='right'>
-            <a href='/cart'>Cart ({{ user.cart.length }} items)</a>
+            <a href='/cart'>Cart ({{ user.cart.length }} {% if user.cart.length > 1 %}items{% else %}item{% endif
+                %})</a>
         </span>
         {% else %}
         <span>
