@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Simple Wish - Checkout</title>
+
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel='stylesheet'
+        href="https://raw.githack.com/xyzshantaram/cf-alert/686f079384c245d8c8809688cb3e5b659730d304/style.css">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+
+<body>
+    <div class='header'>
+        <span>Welcome, {{ user.name }}</span>
+        <span class='right'><a href='/'>Back</a></span>
+    </div>
+
+    <div class='body-content'>
+        <h1>Checkout</h1>
+        <p>
+            Your payment will be processed via the Razorpay payment gateway.
+        </p>
+
+        <button class='button' id="rzp-button">Pay</button>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+        <script type='module'>
+            import cfa from "https://esm.sh/cf-alert";
+
+            const orderId = "{{ orderId }}";
+            alert(orderId);
+
+            window.addEventListener('DOMContentLoaded', () => {
+                const options = {
+                    key: "{{ config.RAZORPAY_KEY_ID }}",
+                    currency: "INR",
+                    amount: "{{ amount }}",
+                    name: "GirlUp One Simple Wish",
+                    order_id: "{{ razorpayId }}",
+                    handler: async (res) => {
+                        console.log(orderId);
+                        const result = await fetch('/confirm-payment', {
+                            method: 'POST',
+                            redirect: 'follow',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                ok: true,
+                                signature: res.razorpay_signature,
+                                razorpayId: res.razorpay_order_id,
+                                orderId: orderId,
+                                paymentId: res.razorpay_payment_id
+                            }),
+                            credentials: 'same-origin'
+                        })
+                    },
+                    theme: {
+                        "color": "#B45F6D"
+                    }
+                }
+
+                const razorpayClient = new Razorpay(options);
+                razorpayClient.on('payment.failed', async (res) => {
+                    const result = await fetch('/confirm-payment', {
+                        method: 'POST',
+                        redirect: 'follow',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            ok: false,
+                            orderId,
+                            err: res
+                        }),
+                        credentials: 'same-origin',
+                    });
+                })
+
+                document.querySelector('#rzp-button').onclick = () => {
+                    razorpayClient.open()
+                };
+            })
+        </script>
+    </div>
+</body>
+
+</html>

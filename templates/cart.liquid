@@ -74,8 +74,18 @@
             </div>
             {% endif %}
         </div>
+
         <div class='cart-actions'>
+            Subtotal: ₹ <strong>{{ subTotal }}</strong>
+        </div>
+
+        <noscript>
+            You'll need to enable JavaScript to check out.
+        </noscript>
+        <div class='cart-actions'>
+            {% if cartItems.length > 0 %}
             <a class='button' href='/cart/checkout'>Check out</a>
+            {% endif %}
         </div>
     </div>
 </body>

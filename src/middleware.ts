@@ -14,7 +14,7 @@ export const ensureAdmin = (req: Request, res: Response, next: NextFunction) => 
 
 export const ensureLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     if (!req.session.username || !req.session.name) res.redirect('/');
-    else next();
+    next();
 }
 
 export const notFound = (_: Request, res: Response, next: NextFunction) => {

@@ -16,6 +16,9 @@ import cart from './routes/cart/root';
 import removeFromCart from './routes/cart/remove';
 import cors from 'cors';
 import viewWish from './routes/wishes/root';
+import Razorpay from 'razorpay';
+import { checkout } from './routes/cart/checkout';
+import confirmPayment from './routes/confirm-payment';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -39,10 +42,7 @@ const initSessions = (app: express.Express) => {
         saveUninitialized: false,
         store: new SqliteStore({
             client: sessionDb,
-        }),
-        cookie: {
-            sameSite: 'strict'
-        }
+        })
     }));
 }
 
@@ -59,6 +59,8 @@ const setupStatic = (app: express.Express) => {
 
 const setupHomepage = (app: express.Express) => {
     app.get('/', homepage);
+    app.use('/confirm-payment', ensureLoggedIn);
+    app.post('/confirm-payment', confirmPayment);
 }
 
 const setupAuth = (app: express.Express) => {
@@ -71,6 +73,7 @@ const setupCart = (app: express.Express) => {
     app.get('/cart', cart);
     app.get('/cart/add/:uuid', addToCart);
     app.get('/cart/remove/:uuid', removeFromCart);
+    app.get('/cart/checkout', checkout);
 }
 
 const setupAdmin = (app: express.Express) => {
@@ -81,6 +84,12 @@ const setupAdmin = (app: express.Express) => {
 
 const setupWishes = (app: express.Express) => {
     app.get('/wishes/:uuid', viewWish);
+}
+
+const setupRazorpay = (app: express.Express) => {
+    const config = app.get('config file');
+    const instance = new Razorpay({ key_id: config.RAZORPAY_KEY_ID, key_secret: config.RAZORPAY_KEY_SECRET });
+    app.set('razorpay', instance);
 }
 
 const setupRoutes = (app: express.Express) => {
@@ -98,9 +107,8 @@ const setupMiddleware = (app: express.Express) => {
     app.use(cors());
     const logger = require('express-logging')(require('logops'));
     app.use(logger);
-    app.use(bodyParser.urlencoded({
-        extended: false
-    }));
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
 }
 
 export const createApp = () => {
@@ -109,7 +117,16 @@ export const createApp = () => {
     const config = getConfig();
     app.set('config file', config);
 
-    [initLiquid, initSessions, setupMiddleware, setupDb, setupStatic, setupRoutes, setupErrorHandler].forEach(fn => {
+    [
+        initLiquid,
+        setupRazorpay,
+        initSessions,
+        setupMiddleware,
+        setupDb,
+        setupStatic,
+        setupRoutes,
+        setupErrorHandler
+    ].forEach(fn => {
         fn(app);
     })
 

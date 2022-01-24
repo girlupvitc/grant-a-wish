@@ -21,5 +21,4 @@ export default async function gauthCallback(req: Request, res: Response, next: N
     });
 
     res.redirect('/');
-    next();
 };

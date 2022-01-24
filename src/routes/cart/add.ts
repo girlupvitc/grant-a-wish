@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from "express";
 import { getUserCart, isValidWish, setUserCart } from "../../queries";
 
 export default function addToCart(req: Request, res: Response, next: NextFunction) {
-    console.log('here');
     const db: Database = req.app.get('db');
     const cart = getUserCart(db, req.session.username);
 

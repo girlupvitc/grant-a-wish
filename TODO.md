@@ -1,7 +1,8 @@
-- Integrate RazorPay for payments
+- Integrate Razorpay for payments
 - Cart functionality
   - cart page
 - Profile page
 - order system
 - add cors (PARTIAL)
 - markdown to wish descriptions
+- clear filters thing on homepage
