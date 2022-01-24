@@ -121,6 +121,11 @@ a.button.button {
     text-decoration: none;
 }
 
+img {
+    max-width: 100%;
+    object-fit: contain;
+}
+
 @media not all and (hover: none) {
     .button:hover, button:hover, input[type=submit]:hover {
         font-weight: bold;
