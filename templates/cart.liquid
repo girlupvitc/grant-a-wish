@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GU OSW - Admin</title>
+
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class='header'>
+        <span>Welcome, {{ user.name }}</span>
+        <span class='right'><a href='/'>Back to homepage</a></span>
+    </div>
+
+    <div class='body-content'>
+        <h1>Cart</h1>
+        <h2>({{ cartItems.length }} {% if cartItems.length != 1 %}items{% else %}item{% endif %})</h2>
+        <div class='wishes'>
+            {% if cartItems.length > 0 %}
+            <div class='wishes'>
+                {% for wish in cartItems %}
+                <div class='wish'>
+                    <div class='wish-title'>
+                        {{ wish.title }}
+                    </div>
+                    <div class='wish-body'>
+                        <div class='wish-description'>
+                            {{ wish.description }}
+                        </div>
+
+                        <div class='wish-price'>
+                            ₹{{ wish.price }}
+                        </div>
+
+                        <div class='wish-actions'>
+                            <a class='button' href='/cart/remove/{{ wish.uuid }}'>
+                                Remove from cart
+                            </a>
+
+                            <a class='button' href='/wishes/{{ wish.uuid }}'>
+                                Learn more
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class='wish error'>
+                <div class='wish-title'>
+                    No items in cart.
+                </div>
+                <div class='wish-body'>
+                    Why don't you go <a href='/'>look at some wishes</a> to grant?
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

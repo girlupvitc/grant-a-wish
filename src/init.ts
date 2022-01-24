@@ -12,6 +12,8 @@ import admin from './routes/admin/root';
 import bodyParser from 'body-parser';
 import newWish from './routes/admin/new-wish';
 import addToCart from './routes/cart/add';
+import cart from './routes/cart/root';
+import removeFromCart from './routes/cart/remove';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -64,7 +66,9 @@ const setupAuth = (app: express.Express) => {
 
 const setupCart = (app: express.Express) => {
     app.use('/cart', ensureLoggedIn);
+    app.get('/cart', cart);
     app.get('/cart/add/:uuid', addToCart);
+    app.get('/cart/remove/:uuid', removeFromCart);
 }
 
 const setupAdmin = (app: express.Express) => {

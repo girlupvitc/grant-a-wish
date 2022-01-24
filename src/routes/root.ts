@@ -8,6 +8,8 @@ const homepage = (req: Request, res: Response, next: NextFunction) => {
     const config: Config = req.app.get('config file');
     const db: Database = req.app.get('db');
 
+    req.session.lastPage = 'home';
+
     res.render('index', {
         wishes: getWishes(db, {
             min: parseInt(req.query['price-min'] as string),
