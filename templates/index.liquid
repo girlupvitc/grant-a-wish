@@ -24,10 +24,10 @@
     <div class='header'>
         {% if user %}
         <span>
-            Logged in as {{ user.name }} <a href='/auth/logout'>(Logout)</a>
+            <a href='/auth/logout' title="Logged in as {{ user.name }}">Logout</a>
         </span>
         <span>
-            <a href='/cart'>Cart ({{ user.cart.length }})</a>
+            <a href='/cart'>Cart ({{ user.cart.length }} items)</a>
         </span>
         {% else %}
         <span>
