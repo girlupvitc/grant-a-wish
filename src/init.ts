@@ -7,7 +7,7 @@ import { getConfig } from './utils';
 import { initDb } from './queries';
 import gauthCallback from './routes/auth/auth_callback';
 import logout from './routes/auth/logout';
-import { ensureLoggedIn } from './middleware';
+import { ensureLoggedIn, errorHandler, notFound } from './middleware';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -52,8 +52,6 @@ const setupHomepage = (app: express.Express) => {
 
 const setupAuth = (app: express.Express) => {
     app.get('/auth/google', gauthCallback);
-
-    // app.use('/auth/logout', ensureLoggedIn);
     app.get('/auth/logout', logout);
 }
 
@@ -71,12 +69,17 @@ const setupRoutes = (app: express.Express) => {
     })
 }
 
+const setupErrorHandler = (app: express.Express) => {
+    app.use(notFound);
+    app.use(errorHandler);
+}
+
 export const createApp = () => {
     const app = express();
     const config = getConfig();
     app.set('config file', config);
 
-    [initLiquid, initSessions, setupDb, setupStatic, setupRoutes].forEach(fn => {
+    [initLiquid, initSessions, setupDb, setupStatic, setupRoutes, setupErrorHandler].forEach(fn => {
         fn(app);
     })
 
