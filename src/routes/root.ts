@@ -9,7 +9,9 @@ const homepage = (req: Request, res: Response, next: NextFunction) => {
     const db: Database = req.app.get('db');
 
     res.render('index', {
-        wishes: getWishes(),
+        wishes: getWishes(db, {
+            min: parseInt(req.query.min as string), max: parseInt(req.query.max as string)
+        }),
         user: getUserInfo(db, req.session.email),
         authUrl: getAuthUrl(config),
         admin: config.ADMINS.includes(req.session.email)

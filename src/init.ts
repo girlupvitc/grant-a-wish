@@ -2,7 +2,7 @@ import express from 'express';
 import { Liquid } from 'liquidjs';
 import fs from 'fs';
 import sqlite from 'better-sqlite3';
-import homepage from './routes/homepage';
+import homepage from './routes/root';
 import { getConfig } from './utils';
 import { initDb } from './queries';
 import gauthCallback from './routes/auth/auth_callback';
@@ -53,8 +53,16 @@ const setupHomepage = (app: express.Express) => {
 const setupAuth = (app: express.Express) => {
     app.get('/auth/google', gauthCallback);
 
-    app.use('/auth/logout', ensureLoggedIn);
+    // app.use('/auth/logout', ensureLoggedIn);
     app.get('/auth/logout', logout);
+}
+
+const setupCart = (app: express.Express) => {
+    app.use('/cart', ensureLoggedIn);
+}
+
+const setupAdmin = (app: express.Express) => {
+    app.use('/admin', ensureLoggedIn);
 }
 
 const setupRoutes = (app: express.Express) => {
