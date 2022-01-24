@@ -4,4 +4,4 @@
 - detailed wish view
 - Profile page
 - order system
-- add cors
+- add cors (PARTIAL)

@@ -14,6 +14,7 @@ import newWish from './routes/admin/new-wish';
 import addToCart from './routes/cart/add';
 import cart from './routes/cart/root';
 import removeFromCart from './routes/cart/remove';
+import cors from 'cors';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -89,6 +90,7 @@ const setupErrorHandler = (app: express.Express) => {
 }
 
 const setupMiddleware = (app: express.Express) => {
+    app.use(cors());
     const logger = require('express-logging')(require('logops'));
     app.use(logger);
     app.use(bodyParser.urlencoded({
