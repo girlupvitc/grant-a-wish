@@ -24,6 +24,7 @@
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "liquidjs": "^9.32.1",
+    "node-fetch": "^3.2.0",
     "tsc": "^2.0.3"
   },
   "devDependencies": {
