@@ -15,6 +15,7 @@ import addToCart from './routes/cart/add';
 import cart from './routes/cart/root';
 import removeFromCart from './routes/cart/remove';
 import cors from 'cors';
+import viewWish from './routes/wishes/root';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -78,8 +79,12 @@ const setupAdmin = (app: express.Express) => {
     app.post('/admin/new-wish', newWish);
 }
 
+const setupWishes = (app: express.Express) => {
+    app.get('/wishes/:uuid', viewWish);
+}
+
 const setupRoutes = (app: express.Express) => {
-    [setupHomepage, setupAdmin, setupCart, setupAuth].forEach(fn => {
+    [setupHomepage, setupAdmin, setupCart, setupAuth, setupWishes].forEach(fn => {
         fn(app);
     })
 }
