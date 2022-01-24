@@ -42,12 +42,16 @@ h1, h2, h3, h4, h5, h6 {
     max-width: calc(65ch - 2rem);
 }
 
-.header > :last-child {
+.header > :last-child.right {
     margin-left: auto;
 }
 
 .header.header a {
     color: inherit;
+}
+
+.header > span:not(:first-child):not(:last-child.right) {
+    margin-left: 0.4rem;
 }
 
 details {

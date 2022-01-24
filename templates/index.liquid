@@ -20,13 +20,17 @@
 </head>
 
 <body>
-
     <div class='header'>
         {% if user %}
         <span>
             <a href='/auth/logout' title="Logged in as {{ user.name }}">Logout</a>
         </span>
+        {% if admin %}
         <span>
+            <a href='/admin'>Admin page</a>
+        </span>
+        {% endif %}
+        <span class='right'>
             <a href='/cart'>Cart ({{ user.cart.length }} items)</a>
         </span>
         {% else %}
@@ -95,6 +99,15 @@
         </div>
 
         <h2>FAQs</h2>
+        <details>
+            <summary>
+                A test question
+            </summary>
+
+            <div class='details-body'>
+                test answer
+            </div>
+        </details>
         <details>
             <summary>
                 A test question

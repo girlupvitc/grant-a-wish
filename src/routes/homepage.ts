@@ -8,12 +8,11 @@ const homepage = (req: Request, res: Response, next: NextFunction) => {
     const config: Config = req.app.get('config file');
     const db: Database = req.app.get('db');
 
-    console.log(req.session);
-
     res.render('index', {
         wishes: getWishes(),
         user: getUserInfo(db, req.session.email),
-        authUrl: getAuthUrl(config)
+        authUrl: getAuthUrl(config),
+        admin: config.ADMINS.includes(req.session.email)
     });
 }
 
