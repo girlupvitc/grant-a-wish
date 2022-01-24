@@ -33,7 +33,23 @@
             </summary>
 
             <div class='details-body'>
-                test answer
+                <form method=POST action='/admin/new-wish'>
+                    <div class='form-group'>
+                        <label for=new-wish-title>Title</label>
+                        <input id=new-wish-title type=text required name=new-wish-title>
+                    </div>
+                    <div class='form-group'>
+                        <label for=new-wish-price>Price (rupees)</label>
+                        <input id=new-wish-price type=number required name=new-wish-price min=0 step=1 validate='\d+'>
+                    </div>
+                    <div class='form-group'>
+                        <label for=new-wish-desc>Description</label>
+                        <textarea id=new-wish-desc name=new-wish-desc></textarea>
+                    </div>
+                    <div class='form-group submit-group'>
+                        <input type=submit value=Create>
+                    </div>
+                </form>
             </div>
         </details>
     </div>

@@ -106,6 +106,13 @@ form {
     font-family: inherit;
 }
 
+textarea {
+    min-height: 4rem;
+    min-width: 40ch;
+    font-size: 1rem;
+    resize: vertical;
+}
+
 .button, button, input[type=submit] {
     cursor: pointer;
     font-size: 0.8rem;
