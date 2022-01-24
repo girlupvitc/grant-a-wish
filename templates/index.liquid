@@ -70,6 +70,7 @@
             </div>
         </details>
 
+        {% if wishes.length > 0 %}
         <div class='wishes'>
             {% for wish in wishes %}
             <div class='wish'>
@@ -97,6 +98,16 @@
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <div class='wish error'>
+            <div class='wish-title'>
+                Sorry :(
+            </div>
+            <div class='wish-body'>
+                No wishes could be found matching the given criteria.
+            </div>
+        </div>
+        {% endif %}
 
         <h2>FAQs</h2>
         <details>

@@ -1,14 +1,19 @@
 .wishes {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    place-items: center;
 }
 
 .wish {
     margin: 0.5rem;
 }
 
-.wish-price {
+.wish.error {
     margin-top: 1rem;
+}
+
+.wish-price {
+    margin-top: 0.75rem;
     font-weight: bold;
     text-align: center;
     font-size: 1.2rem;
@@ -32,6 +37,13 @@
     padding: 0.2rem;
     border: 2px solid var(--white);
     border-top: none;
+}
+
+.wish-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc((65ch - 6rem)/2);
+    white-space: nowrap;
 }
 
 @media screen and (max-aspect-ratio: 1/1) {
