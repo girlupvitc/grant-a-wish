@@ -4,6 +4,4 @@
   - add to cart
 - Profile page
 - order system
-- create admin page
-  - add questions
 - add cors
