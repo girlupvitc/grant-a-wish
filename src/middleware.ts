@@ -18,10 +18,12 @@ export const ensureLoggedIn = (req: Request, res: Response, next: NextFunction) 
 }
 
 export const notFound = (_: Request, res: Response, next: NextFunction) => {
+    if (res.headersSent) return;
     next(StatusCodes.NOT_FOUND);
 }
 
 export const errorHandler = async (err: any, _req: Request, res: Response, _next: NextFunction) => {
+    if (res.headersSent) return;
     const code = parseInt(err) || StatusCodes.INTERNAL_SERVER_ERROR;
 
     res.status(code).render('error', {
