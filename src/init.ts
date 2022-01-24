@@ -10,6 +10,7 @@ import logout from './routes/auth/logout';
 import { ensureAdmin, ensureLoggedIn, errorHandler, notFound } from './middleware';
 import admin from './routes/admin/root';
 import bodyParser from 'body-parser';
+import newWish from './routes/admin/new-wish';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -64,6 +65,7 @@ const setupCart = (app: express.Express) => {
 const setupAdmin = (app: express.Express) => {
     app.use('/admin', ensureAdmin);
     app.get('/admin', admin);
+    app.post('/admin/new-wish', newWish);
 }
 
 const setupRoutes = (app: express.Express) => {

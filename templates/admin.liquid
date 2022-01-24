@@ -27,12 +27,15 @@
 
     <div class='body-content'>
         <h1>Admin</h1>
-        <details>
+        <details {% if wishCreated %} open {% endif %}>
             <summary>
                 Add a new wish
             </summary>
 
             <div class='details-body'>
+                {% if wishCreated %}
+                <p>Wish created successfully.</p>
+                {% endif %}
                 <form method=POST action='/admin/new-wish'>
                     <div class='form-group'>
                         <label for=new-wish-title>Title</label>

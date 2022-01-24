@@ -29,13 +29,15 @@
     "liquidjs": "^9.32.1",
     "logops": "^2.1.2",
     "node-fetch": "^3.2.0",
-    "tsc": "^2.0.3"
+    "tsc": "^2.0.3",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.4.2",
     "@types/express-session": "^1.17.4",
     "@types/passport": "^1.0.7",
     "@types/passport-google-oauth20": "^2.0.11",
+    "@types/uuid": "^8.3.4",
     "esbuild": "^0.14.11"
   }
 }

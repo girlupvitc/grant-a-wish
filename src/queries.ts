@@ -1,6 +1,7 @@
 import { Database } from "better-sqlite3"
 import { isNumber } from "liquidjs/dist/util/underscore";
 import { CartItem } from "./utils";
+import { v4 } from 'uuid';
 
 export const initDb = (db: Database) => {
     db.prepare(`create table if not exists users(
@@ -37,12 +38,24 @@ export const createUser = (db: Database, details: {
     `).run(details.email, details.name, '[]');
 }
 
+export const createWish = (db: Database, details: {
+    title: string,
+    price: number
+    desc?: string
+}) => {
+    const id = v4();
+    db.prepare('insert into wishes(uuid, title, price, status, description) values(?, ?, ?, 0, ?)')
+        .run(id, details.title, details.price, details.desc || '');
+}
+
 export const getWishes = (db: Database, filters?: {
     min?: number,
     max?: number
 }): CartItem[] => {
     const min = filters?.min || 0;
-    const max = filters?.max || 2 ^ 53;
+    const max = filters?.max || 2 ** 53;
+
+    console.log(min, max);
 
     const result = db.prepare(
         `select uuid, title, price, description
