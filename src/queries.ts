@@ -56,7 +56,7 @@ export const getWishes = (db: Database, filters?: {
 
 export const getUserCart = (db: Database, username: string): CartItem[] => {
     const res = db.prepare('select cart from users where username = ?').get(username);
-    return JSON.parse(res[0].cart);
+    return JSON.parse(res.cart);
 }
 
 export const getUserInfo = (db: Database, username: string | undefined) => {
