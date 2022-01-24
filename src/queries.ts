@@ -65,9 +65,20 @@ export const getWishes = (db: Database, filters?: {
     return result;
 }
 
-export const getUserCart = (db: Database, username: string): CartItem[] => {
+export const getUserCart = (db: Database, username: string): string[] => {
     const res = db.prepare('select cart from users where username = ?').get(username);
     return JSON.parse(res.cart);
+}
+
+export const setUserCart = (db: Database, username: string, contents: string[]) => {
+    db.prepare('update users set cart = ? where username = ?')
+        .run(JSON.stringify(contents), username);
+}
+
+export const isValidWish = (db: Database, uuid: string) => {
+    const isValid = !!(db.prepare('select uuid from wishes where status = 0 and uuid = ?').get(uuid));
+    console.log('isValidWish?', isValid ? 'yes' : 'no')
+    return isValid;
 }
 
 export const getUserInfo = (db: Database, username: string | undefined) => {

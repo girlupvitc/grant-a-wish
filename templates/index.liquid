@@ -87,9 +87,16 @@
                     </div>
 
                     <div class='wish-actions'>
+                        {% if user.cart contains wish.uuid %}
+                        <span class='button'>
+                            Already in cart
+                        </span>
+                        {% else %}
                         <a class='button' href='/cart/add/{{ wish.uuid }}'>
                             Add to cart
                         </a>
+                        {% endif %}
+
                         <a class='button' href='/wishes/{{ wish.uuid }}'>
                             Learn more
                         </a>

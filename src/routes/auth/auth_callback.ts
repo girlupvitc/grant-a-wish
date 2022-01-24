@@ -10,7 +10,7 @@ export default async function gauthCallback(req: Request, res: Response, next: N
     const token = await getAccessToken(config, authCode);
     const userInfo: any = await getProfileInfo(token);
 
-    req.session.email = userInfo.email;
+    req.session.username = userInfo.email;
     req.session.name = userInfo.given_name;
 
     const db: Database = req.app.get('db');

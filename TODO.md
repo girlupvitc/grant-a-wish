@@ -1,7 +1,7 @@
 - Integrate RazorPay for payments
 - Cart functionality
   - cart page
-  - add to cart
+- detailed wish view
 - Profile page
 - order system
 - add cors

@@ -13,9 +13,9 @@ const homepage = (req: Request, res: Response, next: NextFunction) => {
             min: parseInt(req.query['price-min'] as string),
             max: parseInt(req.query['price-max'] as string)
         }),
-        user: getUserInfo(db, req.session.email),
+        user: getUserInfo(db, req.session.username),
         authUrl: getAuthUrl(config),
-        admin: config.ADMINS.includes(req.session.email)
+        admin: config.ADMINS.includes(req.session.username)
     });
 }
 
