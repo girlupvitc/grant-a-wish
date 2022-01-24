@@ -1,5 +1,33 @@
+import { Database } from "better-sqlite3"
+import { CartItem } from "./utils";
 
-export const getWishes = () => {
+export const initDb = (db: Database) => {
+    db.prepare(`create table if not exists users(
+        username text unique primary key,
+        name text,
+        cart text not null default "[]",
+    )`).run();
+
+    db.prepare(`create table if not exists orders(
+        uuid unique primary key,
+        user text,
+        items text not null default "[]",
+        status text not null default "pending",
+        payment_method text
+    )`).run();
+
+    db.prepare(`create table if not exists wishes(
+        uuid unique primary key,
+        title text not null,
+        price integer not null,
+        description text
+    )`).run();
+}
+
+export const getWishes = (filters?: {
+    min?: number,
+    max?: number
+}) => {
     return [{
         title: 'test',
         description: 'testing a description',
@@ -14,9 +42,22 @@ export const getWishes = () => {
     }]
 }
 
-export const getUserInfo = () => {
-    return {
-        name: 'test',
-        cart: []
+export const getUserCart = (db: Database, username: string | undefined): CartItem[] | null => {
+    if (!username) {
+        return null;
+    }
+    else {
+        const res = db.prepare('select cart from users where username = ?').get(username);
+        return JSON.parse(res.cart);
+    }
+}
+
+export const getUserInfo = (db: Database, username: string | undefined) => {
+    if (username) {
+        const cart = getUserCart(db, username);
+
+    }
+    else {
+        return null;
     }
 }

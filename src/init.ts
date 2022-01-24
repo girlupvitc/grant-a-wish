@@ -4,6 +4,7 @@ import fs from 'fs';
 import sqlite from 'better-sqlite3';
 import homepage from './routes/homepage';
 import { getConfig } from './utils';
+import { initDb } from './queries';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -32,9 +33,10 @@ const initSessions = (app: express.Express) => {
 }
 
 const setupDb = (app: express.Express) => {
-    const database = sqlite('storage/osw.db');
-    database.pragma('journal_mode = WAL');
-    app.set('db', database);
+    const db = sqlite('storage/osw.db');
+    db.pragma('journal_mode = WAL');
+    initDb(db);
+    app.set('db', db);
 }
 
 const setupStatic = (app: express.Express) => {
