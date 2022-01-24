@@ -3,6 +3,7 @@ import { Liquid } from 'liquidjs';
 import fs from 'fs';
 import sqlite from 'better-sqlite3';
 import homepage from './routes/homepage';
+import { getConfig } from './utils';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -38,19 +39,6 @@ const setupDb = (app: express.Express) => {
 
 const setupStatic = (app: express.Express) => {
     app.use('/static', express.static('static'));
-}
-
-const getConfig = () => {
-    let config;
-    try {
-        config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
-    }
-    catch (e) {
-        console.error(`Error reading config file: ${e}`);
-        process.exit(1);
-    }
-
-    return config;
 }
 
 const setupHomepage = (app: express.Express) => {
