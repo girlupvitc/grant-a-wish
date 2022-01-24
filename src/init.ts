@@ -34,7 +34,10 @@ const initSessions = (app: express.Express) => {
         saveUninitialized: false,
         store: new SqliteStore({
             client: sessionDb,
-        })
+        }),
+        cookie: {
+            sameSite: 'strict'
+        }
     }));
 }
 
