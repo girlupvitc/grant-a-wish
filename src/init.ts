@@ -1,13 +1,14 @@
 import express from 'express';
 import { Liquid } from 'liquidjs';
 import fs from 'fs';
-import sqlite from 'better-sqlite3';
+import sqlite, { Database } from 'better-sqlite3';
 import homepage from './routes/root';
 import { getConfig } from './utils';
 import { initDb } from './queries';
 import gauthCallback from './routes/auth/auth_callback';
 import logout from './routes/auth/logout';
-import { ensureLoggedIn, errorHandler, notFound } from './middleware';
+import { ensureAdmin, ensureLoggedIn, errorHandler, notFound } from './middleware';
+import admin from './routes/admin/root';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -60,11 +61,12 @@ const setupCart = (app: express.Express) => {
 }
 
 const setupAdmin = (app: express.Express) => {
-    app.use('/admin', ensureLoggedIn);
+    app.use('/admin', ensureAdmin);
+    app.get('/admin', admin);
 }
 
 const setupRoutes = (app: express.Express) => {
-    [setupHomepage, setupAuth].forEach(fn => {
+    [setupHomepage, setupAdmin, setupAuth].forEach(fn => {
         fn(app);
     })
 }
@@ -74,8 +76,11 @@ const setupErrorHandler = (app: express.Express) => {
     app.use(errorHandler);
 }
 
+const logger = require('express-logging')(require('logops'));
+
 export const createApp = () => {
     const app = express();
+    app.use(logger);
     const config = getConfig();
     app.set('config file', config);
 
