@@ -4,7 +4,6 @@ import { createWish } from "../../queries";
 
 export default function newWish(req: Request, res: Response, next: NextFunction) {
     const db: Database = req.app.get('db');
-    console.log(req.body);
 
     createWish(db, {
         desc: req.body['new-wish-desc'],

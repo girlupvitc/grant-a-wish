@@ -55,8 +55,6 @@ export const getWishes = (db: Database, filters?: {
     const min = filters?.min || 0;
     const max = filters?.max || 2 ** 53;
 
-    console.log(min, max);
-
     const result = db.prepare(
         `select uuid, title, price, description
         from wishes 
