@@ -50,4 +50,12 @@
     .wishes {
         grid-template-columns: 1fr;
     }
+
+    .wish-description {
+        width: 80vw;
+    }
+
+    .header {
+        padding: 0;
+    }
 }
