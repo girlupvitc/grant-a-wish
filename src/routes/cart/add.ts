@@ -17,6 +17,10 @@ export default function addToCart(req: Request, res: Response, next: NextFunctio
     else {
         return next(400);
     }
-
-    res.redirect('/');
+    if (req.session.lastPage?.startsWith('/wishes/')) {
+        res.redirect(req.session.lastPage);
+    }
+    else {
+        res.redirect('/');
+    }
 }

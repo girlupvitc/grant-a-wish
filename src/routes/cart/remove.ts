@@ -21,6 +21,9 @@ export default function removeFromCart(req: Request, res: Response, next: NextFu
     if (req.session.lastPage === 'cart') {
         res.redirect('/cart');
     }
+    else if (req.session.lastPage?.startsWith('/wishes/')) {
+        res.redirect(req.session.lastPage);
+    }
     else {
         res.redirect('/');
     }

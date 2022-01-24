@@ -10,9 +10,12 @@ const getWish = (db: Database, uuid: string): CartItem => {
 
 export default function viewWish(req: Request, res: Response, next: NextFunction) {
     const db: Database = req.app.get('db');
+
     if (!req.params.uuid) {
         return next(400);
     }
+
+    req.session.lastPage = `/wishes/${req.params.uuid}`;
 
     if (isValidWish(db, req.params.uuid)) {
         const wish = getWish(db, req.params.uuid);
