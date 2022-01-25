@@ -88,7 +88,7 @@ export const setUserCart = (db: Database, username: string, contents: string[]) 
         .run(JSON.stringify(contents), username);
 }
 
-export const isValidWish = (db: Database, uuid: string) => {
+export const isAvailableWish = (db: Database, uuid: string) => {
     const isValid = !!(db.prepare('select uuid from wishes where status = ? and uuid = ?').get(PAYMENT_STATUSES.Available, uuid));
     return isValid;
 }
