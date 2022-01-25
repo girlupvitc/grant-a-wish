@@ -33,8 +33,10 @@ export default function admin(req: Request, res: Response, next: NextFunction) {
             name: req.session.name,
         },
         wishCreated: req.session.flash?.wishCreated,
+        wishDeleted: req.session.flash?.wishDeleted,
         orders: getOrderList(db, statusToNumber(req.query.status as string) || null)
     });
 
     if (req.session.flash?.wishCreated) delete req.session.flash.wishCreated;
+    if (req.session.flash?.wishDeleted) delete req.session.flash.wishDeleted;
 }

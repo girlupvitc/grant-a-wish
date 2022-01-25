@@ -28,18 +28,23 @@
         <span>Welcome, {{ user.name }}</span>
         <span class='right'><a href='/'>Back to main site</a></span>
     </div>
-
     <div class='body-content'>
+
+        {% if wishCreated %}
+        <p>Wish created successfully.</p>
+        {% endif %}
+
+        {% if wishDeleted %}
+        <p>Wish deleted successfully.</p>
+        {% endif %}
+
         <h1>Admin</h1>
-        <details {% if wishCreated %} open {% endif %}>
+        <details>
             <summary>
                 Add a new wish
             </summary>
 
             <div class='details-body'>
-                {% if wishCreated %}
-                <p>Wish created successfully.</p>
-                {% endif %}
                 <form method=POST action='/admin/new-wish'>
                     <div class='form-group'>
                         <label for=new-wish-title>Title</label>

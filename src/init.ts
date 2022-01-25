@@ -20,6 +20,7 @@ import Razorpay from 'razorpay';
 import { checkout } from './routes/cart/checkout';
 import handlePayment from './routes/payment';
 import profile from './routes/profile';
+import handleWishDeletion from './routes/admin/wishes/delete';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -81,6 +82,7 @@ const setupAdmin = (app: express.Express) => {
     app.use('/admin', ensureAdmin);
     app.get('/admin', admin);
     app.post('/admin/new-wish', newWish);
+    app.get('/admin/wishes/delete/:uuid', handleWishDeletion);
 }
 
 const setupWishes = (app: express.Express) => {
