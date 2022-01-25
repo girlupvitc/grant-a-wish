@@ -153,7 +153,7 @@ export const getUserInfo = (db: Database, username: string | undefined) => {
     return { cart, name: meta.name, uuid: meta.uuid };
 }
 
-export const getUsername = (db: Database, uuid: string): string | undefined => {
+export const getUsername = (db: Database, uuid: string): string | null => {
     return db.prepare('select username from users where uuid = ?').get(uuid)?.username ?? null;
 }
 
