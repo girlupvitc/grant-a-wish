@@ -5,7 +5,7 @@
   "main": "src/main.ts",
   "scripts": {
     "build": "node esbuild.config.js",
-    "dev": "npm run build && mkdir -p storage && node ./dist/built.js"
+    "start": "npm run build && mkdir -p storage && node ./dist/built.js"
   },
   "repository": {
     "type": "git",
