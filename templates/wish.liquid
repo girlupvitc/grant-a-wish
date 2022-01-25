@@ -30,6 +30,8 @@
         <h2>₹ {{ wish.price }}</h2>
 
         <div>
+
+            {% if wish.status == 0 %}
             {% if user.cart contains wish.uuid %}
             <a class='button' href='/cart/remove/{{ wish.uuid }}'>
                 Remove from cart
@@ -38,6 +40,16 @@
             <a class='button' href='/cart/add/{{ wish.uuid }}'>
                 Add to cart
             </a>
+            {% endif %}
+
+            {% elsif wish.status == 1 %}
+            <p>
+                Looks like someone else is trying to check out this wish! Please check back later.
+            </p>
+            {% else %}
+            <span class='button' title='This wish has already been granted.'>
+                Granted
+            </span>
             {% endif %}
         </div>
 

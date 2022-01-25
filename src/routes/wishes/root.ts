@@ -1,10 +1,10 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
-import { getUserCart, getUserInfo, isValidWish } from "../../queries";
+import { getUserInfo, isValidWish } from "../../queries";
 import { CartItem } from "../../utils";
 
 const getWish = (db: Database, uuid: string): CartItem => {
-    const wish = db.prepare('select title, description, price, uuid from wishes where uuid = ?').get(uuid);
+    const wish = db.prepare('select title, description, price, uuid, status from wishes where uuid = ?').get(uuid);
     return wish;
 }
 
