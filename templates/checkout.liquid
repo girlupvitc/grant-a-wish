@@ -38,7 +38,7 @@
             Your payment will be processed via the Razorpay payment gateway. Click the button below to pay.
         </p>
 
-        <button class='button' id="rzp-button">Pay ₹ {{ subTotal / 100 }}</button>
+        <button class='button' id="rzp-button">Pay ₹ {{ subTotal | divided_by: 100 }}</button>
         <button class='button' id="cancel-button">Cancel payment</button>
 
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -93,8 +93,7 @@
                     razorpayClient.open()
                 };
 
-                document.querySelector('#cancel-button').onclick = () => {
-                    razorpayClient = null;
+                document.querySelector('#cancel-button').onclick = async () => {
                     const result = await postJson('/confirm-payment', {
                         ok: false,
                         orderId,
