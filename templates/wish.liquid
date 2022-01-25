@@ -55,6 +55,10 @@
                 Granted
             </span>
             {% endif %}
+
+            {% if isAdmin and wish.status == 0 or wish.status == 1 %}
+            <a class='button' href='/admin/wishes/delete/{{ wish.uuid }}'>Delete wish</a>
+            {% endif %}
         </div>
 
         <h3>Description</h3>
