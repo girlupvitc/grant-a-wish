@@ -17,7 +17,7 @@ export const initDb = (db: Database) => {
         amount integer not null,
         user text not null,
         items text not null,
-        status text not null,
+        status integer not null,
         razorpay_order_id text
     ) STRICT`).run();
 
