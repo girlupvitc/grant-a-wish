@@ -2,3 +2,7 @@
 - markdown to wish descriptions
 - admin wish deletion
 - admin order cancellation
+- contact page
+- add faqs and partners
+- switch to real credentials
+- set up domain
