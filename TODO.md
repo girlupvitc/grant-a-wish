@@ -1,2 +1,4 @@
 - add cors (PARTIAL)
 - markdown to wish descriptions
+- admin wish deletion
+- admin order cancellation
