@@ -55,10 +55,16 @@
         </p>
 
         <h2>Wishes</h2>
-        <details id='wishes-filter'>
+        <details id='wishes-filter' {% if filtered%} open {% endif %}>
             <summary>Filter</summary>
             <div class='details-body'>
                 <form method=GET>
+                    {% if filtered %}
+                    <div class='form-group'>
+                        <a href='/'>Clear filters</a>
+                    </div>
+                    {% endif %}
+
                     <div class='form-group'>
                         <label for='price-min'>Price above</label>
                         <input id=price-min type=number name=price-min min=0>

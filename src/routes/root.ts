@@ -15,6 +15,7 @@ const homepage = (req: Request, res: Response, next: NextFunction) => {
             min: parseInt(req.query['price-min'] as string),
             max: parseInt(req.query['price-max'] as string)
         }),
+        filtered: typeof req.query['price-min'] === 'string' || typeof req.query['price-max'] === 'string',
         user: getUserInfo(db, req.session.username),
         authUrl: getAuthUrl(config),
         admin: config.ADMINS.includes(req.session.username)
