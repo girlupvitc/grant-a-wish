@@ -10,24 +10,24 @@ export const initDb = (db: Database) => {
         uuid text unique not null,
         name text,
         cart text not null
-    )`).run();
+    ) STRICT`).run();
 
     db.prepare(`create table if not exists orders(
-        uuid unique primary key,
+        uuid text unique primary key,
         amount integer not null,
         user text not null,
         items text not null,
         status text not null,
         razorpay_order_id text
-    )`).run();
+    ) STRICT`).run();
 
     db.prepare(`create table if not exists wishes(
-        uuid unique primary key,
+        uuid text unique primary key,
         title text not null,
         price integer not null,
         status integer not null,
         description text
-    )`).run();
+    ) STRICT`).run();
 }
 
 export const createUser = (db: Database, details: {
