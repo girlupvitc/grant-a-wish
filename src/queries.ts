@@ -57,7 +57,7 @@ export const getWishes = (db: Database, filters?: {
     const max = filters?.max || 2 ** 53;
 
     const result = db.prepare(
-        `select uuid, title, price, description
+        `select uuid, title, price, description, status
         from wishes 
         where price between ? and ? 
         and status = ?
@@ -70,7 +70,7 @@ export const getCartItems = (db: Database, cart: string[]) => {
     const cartItems: CartItem[] = [];
 
     if (cart.length !== 0) {
-        const query = "SELECT uuid, title, price, description, price FROM wishes WHERE uuid IN (?" + ", ?".repeat(cart.length - 1) + ")";
+        const query = "SELECT uuid, title, price, description, status FROM wishes WHERE uuid IN (?" + ", ?".repeat(cart.length - 1) + ")";
         const res = db.prepare(query).all(...cart);
         cartItems.push(...res);
     }
@@ -97,13 +97,13 @@ export const setStatus = (db: Database, uuid: string, status: 0 | 1 | 2 | 3) => 
     db.prepare('update wishes set status = ? where uuid = ?').run(status, uuid);
 }
 
-export const isValidCart = (db: Database, cart: string[]) => {
+export const getConflictingItems = (db: Database, cart: string[]): CartItem[] => {
     if (cart.length !== 0) {
-        const query = "SELECT uuid from wishes where status != ? and uuid IN (?" + ", ?".repeat(cart.length - 1) + ")";
+        const query = "SELECT title, description, uuid, price, status from wishes where status != ? and uuid IN (?" + ", ?".repeat(cart.length - 1) + ")";
         const res = db.prepare(query).all(PAYMENT_STATUSES.Available, ...cart);
-        return res.length == 0;
+        return res;
     }
-    else return false;
+    else return [];
 }
 
 export const setCartStatus = (db: Database, cart: string[], status: 0 | 1 | 2) => {
@@ -132,6 +132,11 @@ export const createOrder = (db: Database, cart: string[], user: string) => {
 
 export const setRazorpayOrderId = (db: Database, id: string, razorpayId: string) => {
     db.prepare('update orders set razorpay_order_id = ? where uuid = ?').run(razorpayId, id);
+}
+
+export function isPendingOrder(db: Database, orderId: string) {
+    const order = db.prepare('select uuid from orders where uuid = ? and status = ?').get(orderId, PAYMENT_STATUSES.Pending);
+    return !!order;
 }
 
 export const getUserInfo = (db: Database, username: string | undefined) => {

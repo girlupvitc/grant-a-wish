@@ -33,45 +33,45 @@
 
     <div class='body-content'>
         <h1>Checkout</h1>
+        {% if conflictingItems.length === 0 %}
         <p>
             Your payment will be processed via the Razorpay payment gateway. Click the button below to pay.
         </p>
 
-        <button class='button' id="rzp-button">Pay</button>
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <button class='button' id="rzp-button">Pay ₹ {{ subTotal / 100 }}</button>
+        <button class='button' id="cancel-button">Cancel payment</button>
 
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <script type='module'>
             import cfa from "https://esm.sh/cf-alert";
 
             const orderId = "{{ orderId }}";
 
+            const postJson = async (url, body) => fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body),
+                credentials: 'same-origin'
+            });
+
             window.addEventListener('DOMContentLoaded', () => {
                 const options = {
                     key: "{{ config.RAZORPAY_KEY_ID }}",
                     currency: "INR",
-                    amount: "{{ amount }}",
+                    amount: "{{ subTotal }}",
                     name: "GirlUp One Simple Wish",
                     order_id: "{{ razorpayId }}",
                     handler: async (res) => {
                         console.log(orderId);
-                        const result = await fetch('/confirm-payment', {
-                            method: 'POST',
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                ok: true,
-                                signature: res.razorpay_signature,
-                                razorpayId: res.razorpay_order_id,
-                                orderId: orderId,
-                                paymentId: res.razorpay_payment_id
-                            }),
-                            credentials: 'same-origin'
+                        const result = await postJson('/confirm-payment', {
+                            ok: true, orderId,
+                            signature: res.razorpay_signature,
+                            razorpayId: res.razorpay_order_id,
+                            paymentId: res.razorpay_payment_id
                         })
-
-                        if (result.redirected) {
-                            window.location.href = result.url;
-                        };
+                        if (result.redirected) window.location.href = result.url;
                     },
                     theme: {
                         "color": "#B45F6D"
@@ -80,29 +80,51 @@
 
                 const razorpayClient = new Razorpay(options);
                 razorpayClient.on('payment.failed', async (res) => {
-                    const result = await fetch('/confirm-payment', {
-                        method: 'POST',
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            ok: false,
-                            orderId,
-                            err: res
-                        }),
-                        credentials: 'same-origin',
-                    });
+                    const result = await postJson('/confirm-payment', {
+                        ok: false,
+                        orderId,
+                        err: res
+                    })
 
-                    if (result.redirected) {
-                        window.location.href = result.url;
-                    }
+                    if (result.redirected) window.location.href = result.url;
                 })
 
                 document.querySelector('#rzp-button').onclick = () => {
                     razorpayClient.open()
                 };
+
+                document.querySelector('#cancel-button').onclick = () => {
+                    razorpayClient = null;
+                    const result = await postJson('/confirm-payment', {
+                        ok: false,
+                        orderId,
+                        err: {
+                            error: {
+                                "description": "Cancelled by user.",
+                                "source": "customer",
+                            }
+                        }
+                    })
+
+                    if (result.redirected) window.location.href = result.url;
+                }
             })
         </script>
+
+        {% else %}
+        <p>Looks like someone else already granted some of these wishes.</p>
+
+        <p>We've removed the following items from your cart:</p>
+        <ul>
+            {% for wish in conflictingItems %}
+            <li>
+                <a href='/wishes/{{ wish.uuid }}'>
+                    <strong>{{ wish.title }}</strong>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
 </body>
 

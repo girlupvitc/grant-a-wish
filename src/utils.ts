@@ -15,7 +15,8 @@ export interface CartItem {
     uuid: string,
     description: string,
     title: string,
-    price: number
+    price: number,
+    status: number
 }
 
 export const PAYMENT_STATUSES: {
