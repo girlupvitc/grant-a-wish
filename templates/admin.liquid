@@ -59,6 +59,58 @@
                 </form>
             </div>
         </details>
+        <details>
+            <summary>Orders</summary>
+            <div class="details-body">
+                <ul>
+                    <li><a href='/admin'>Show all orders</a></li>
+                    <li><a href='/admin?status=pending'>Show only pending orders</a></li>
+                    <li><a href='/admin?status=complete'>Show only completed orders</a></li>
+                </ul>
+                </form>
+                {% if orders.length != 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Amount</th>
+                            <th>Items</th>
+                            <th>User</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>₹{{ order.amount }}</td>
+                            <td>
+                                <ul class='order-items'>
+                                    {% for item in order.items %}
+                                    <li class='order-item'>
+                                        <a class='order-link' href='/wishes/{{ item }}' title='{{ item }}'>{{ item
+                                            }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{ order.user }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>
+                                <ul>
+                                    <li class='order-item'>
+                                        <a href='/admin/orders/delete/{{ order.uuid }}'>Delete</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {%else%}
+                No orders found
+                {% endif %}
+            </div>
+        </details>
     </div>
 </body>
 

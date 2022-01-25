@@ -167,4 +167,8 @@ pre {
     .body-content > * {
         margin-left: 0.3rem;
     }
+
+    .header {
+        padding: 0;
+    }
 }

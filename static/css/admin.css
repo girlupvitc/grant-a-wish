@@ -1,0 +1,33 @@
+.body-content table {
+    width: 100%;
+    overflow: auto;
+}
+
+.body-content table td, .body-content table th {
+    background-color: rgba(0,0,0,0.2);
+    padding: 0.2rem;
+    text-align: center;
+}
+
+.no-style {
+    list-style: none;
+}
+
+.order-items {
+    list-style: none;
+}
+
+.order-item {
+    max-width: 10ch;
+    font-family: monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+td>ul {
+    margin: 0.2rem;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 0;
+}
