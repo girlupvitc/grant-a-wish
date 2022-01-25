@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/cart.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+
+<body>
+    <div class='header'>
+        <span>Welcome, {{ user.name }}</span>
+        <span class='right'><a href='/'>Back</a></span>
+    </div>
+
+    <div class='body-content'>
+        <h1>Your Profile</h1>
+
+        <h2>Wishes you've granted</h2>
+        <h2>({{ granted.length }} {% if granted.length != 1 %}items{% else %}item{% endif %})</h2>
+        <div class='wishes'>
+            {% if granted.length > 0 %}
+            <div class='wishes'>
+                {% for wish in granted %}
+                {% if wish.status == 2 %}
+                <div class='wish'>
+                    <div class='wish-title'>
+                        {{ wish.title }}
+                    </div>
+                    <div class='wish-body'>
+                        <div class='wish-description'>
+                            {{ wish.description }}
+                        </div>
+
+                        <div class='wish-price'>
+                            ₹{{ wish.price }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class='wish error'>
+                <div class='wish-title'>
+                    You've not granted any wishes yet.
+                </div>
+                <div class='wish-body'>
+                    Why don't you go <a href='/'>look at some</a>?
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

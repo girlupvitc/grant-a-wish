@@ -7,9 +7,9 @@ import e from "express";
 export const initDb = (db: Database) => {
     db.prepare(`create table if not exists users(
         username text unique primary key,
+        uuid text unique not null,
         name text,
-        cart text not null,
-        granted_wishes text default "[]"
+        cart text not null
     )`).run();
 
     db.prepare(`create table if not exists orders(
@@ -33,10 +33,11 @@ export const createUser = (db: Database, details: {
     name: string,
     email: string
 }) => {
+    const uuid = v4();
     db.prepare(`insert or ignore into 
-        users(username, name, cart)
-        values(?, ?, ?)
-    `).run(details.email, details.name, '[]');
+        users(username, uuid, name, cart)
+        values(?, ?, ?, ?)
+    `).run(details.email, uuid, details.name, '[]');
 }
 
 export const createWish = (db: Database, details: {
@@ -98,7 +99,7 @@ export const isValidWish = (db: Database, uuid: string) => {
     return isValid;
 }
 
-export const setStatus = (db: Database, uuid: string, status: 0 | 1 | 2 | 3) => {
+export const setWishStatus = (db: Database, uuid: string, status: 0 | 1 | 2 | 3) => {
     db.prepare('update wishes set status = ? where uuid = ?').run(status, uuid);
 }
 
@@ -147,9 +148,19 @@ export function isPendingOrder(db: Database, orderId: string) {
 export const getUserInfo = (db: Database, username: string | undefined) => {
     if (!username) return null;
     const cart = getUserCart(db, username);
+    const meta = db.prepare('select name, uuid from users where username = ?').get(username);
 
-    return {
-        cart: cart,
-        name: username
-    }
+    return { cart, name: meta.name, uuid: meta.uuid };
+}
+
+export const getUsername = (db: Database, uuid: string): string | undefined => {
+    return db.prepare('select username from users where uuid = ?').get(uuid)?.username ?? null;
+}
+
+export const getGrantedWishes = (db: Database, username: string) => {
+    const granted = db.prepare('select items from orders where user = ?').all(username);
+    const carts = granted.map(item => {
+        return JSON.parse(item);
+    })
+    return getCartItems(db, carts.flat());
 }
