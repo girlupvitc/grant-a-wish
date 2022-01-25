@@ -149,6 +149,10 @@ pre {
     }    
 }
 
+.sr-only {
+    display: none !important;
+}
+
 @media screen and (max-aspect-ratio: 1/1) {
     .form-group {
         flex-direction: column;

@@ -179,3 +179,8 @@ export const getOrderDetails = (db: Database, orderId: string) => {
 
     return result;
 }
+
+export const getWishCount = (db: Database) => {
+    const result = db.prepare('select count(status) as count from wishes where status = ?').get(PAYMENT_STATUSES.Successful);
+    return result.count;
+}

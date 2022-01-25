@@ -46,6 +46,24 @@
     white-space: nowrap;
 }
 
+.odo-digit {
+    border-radius: 0.2rem;
+    padding: 0.5rem;
+    background: var(--white);
+    color: var(--pink);
+    margin: 0.2rem;
+}
+
+.odometer {
+    display: flex;
+    align-items: center;
+}
+
+.odo-text {
+    margin-left: 0.5rem;
+    font-weight: bold;
+}
+
 @media screen and (max-aspect-ratio: 1/1) {
     .wishes {
         grid-template-columns: 1fr;

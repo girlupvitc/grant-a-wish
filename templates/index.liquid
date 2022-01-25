@@ -48,6 +48,19 @@
     <div class="body-content">
         <h1>GirlUp - One Simple Wish</h1>
 
+        <div class='sr-only'>
+            {{ wishCount }}
+        </div>
+
+        <div class='odometer' aria-hidden="true">
+            {% for char in wishCountArray %}
+            <span class='odo-digit'>
+                {{ char }}
+            </span>
+            {% endfor %}
+            <div class='odo-text'>wishes granted</div>
+        </div>
+
         <p>
             <strong>One Simple Wish</strong> is a fundraiser and our second annual event of the year.
             Kids in orphanages and youth homes are often stripped of choice and identity.
