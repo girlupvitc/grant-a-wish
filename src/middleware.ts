@@ -29,9 +29,7 @@ export const errorHandler = async (err: any, _req: Request, res: Response, _next
     res.status(code).render('error', {
         code,
         message: getReasonPhrase(code) || "Internal Server Error",
-        info: `
-        ${err}
-        ${err.stack}
-        `
+        info: `${err}`,
+        errStack: err.stack
     })
 }
