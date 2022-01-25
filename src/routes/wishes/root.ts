@@ -1,12 +1,7 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
-import { getUserInfo, isValidWish } from "../../queries";
-import { CartItem, Config } from "../../utils";
-
-const getWish = (db: Database, uuid: string): CartItem => {
-    const wish = db.prepare('select title, description, price, uuid, status from wishes where uuid = ?').get(uuid);
-    return wish;
-}
+import { getUserInfo, getWish, isValidWish } from "../../queries";
+import { Config } from "../../utils";
 
 export default function viewWish(req: Request, res: Response, next: NextFunction) {
     const db: Database = req.app.get('db');
@@ -14,13 +9,14 @@ export default function viewWish(req: Request, res: Response, next: NextFunction
     if (!req.params.uuid) {
         return next(400);
     }
+
     const config: Config = req.app.get('config file');
     const isAdmin = config.ADMINS.includes(req.session.username);
 
-    req.session.lastPage = `/wishes/${req.params.uuid}`;
-
     if (isValidWish(db, req.params.uuid)) {
+        req.session.lastPage = `/wishes/${req.params.uuid}`;
         const wish = getWish(db, req.params.uuid);
+        if (!wish) return next(400);
         const options: Record<string, any> = {
             wish, isAdmin
         };

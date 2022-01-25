@@ -51,6 +51,15 @@ export const createWish = (db: Database, details: {
         .run(id, details.title, details.price, details.desc || '');
 }
 
+export const getWish = (db: Database, uuid: string): CartItem | undefined => {
+    const wish = db.prepare('select title, description, price, uuid, status from wishes where uuid = ?').get(uuid);
+    return wish;
+}
+
+export const deleteWish = (db: Database, uuid: string) => {
+    db.prepare('delete from wishes where uuid = ?').run(uuid);
+}
+
 export const getWishes = (db: Database, filters?: {
     min?: number,
     max?: number
