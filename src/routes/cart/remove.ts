@@ -4,6 +4,8 @@ import { getUserCart, setUserCart } from "../../queries";
 
 export const removeCartItem = (db: Database, user: string, uuid: string) => {
     const cart = getUserCart(db, user);
+    if (!cart) return false;
+
     if (cart.includes(uuid)) {
         cart.splice(cart.indexOf(uuid), 1);
     }

@@ -8,6 +8,7 @@ export default function addToCart(req: Request, res: Response, next: NextFunctio
 
     const id = req.params.uuid;
     if (!id) return next(400);
+    if (!cart) return next(500);
 
     if (isAvailableWish(db, id)) {
         cart.push(id);
