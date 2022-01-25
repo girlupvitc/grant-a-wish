@@ -26,15 +26,14 @@
 
 <body>
     <div class='header'>
-        <span>Welcome, {{ user.name }}</span>
-        <span class='right'><a href='/'>Back</a></span>
+        <span><a href='/'>Back</a></span>
     </div>
 
     <div class='body-content'>
-        <h1>Your Profile</h1>
+        <h1>{% if loggedInUser and loggedInUser.uuid == user.uuid %}Your{% else %}{{ user.name }}'s{% endif %} Profile
+        </h1>
 
-        <h2>Wishes you've granted</h2>
-        <h2>({{ granted.length }} {% if granted.length != 1 %}items{% else %}item{% endif %})</h2>
+        <h2>Wishes granted: {{ granted.length }}</h2>
         <div class='wishes'>
             {% if granted.length > 0 %}
             <div class='wishes'>
@@ -59,12 +58,19 @@
             </div>
             {% else %}
             <div class='wish error'>
+                {% if loggedInUser and loggedInUser.uuid == user.uuid %}
                 <div class='wish-title'>
                     You've not granted any wishes yet.
                 </div>
                 <div class='wish-body'>
                     Why don't you go <a href='/'>look at some</a>?
                 </div>
+                {%else%}
+                <div class='wish-title'>
+                    {{ user.name }} has not granted any wishes yet.
+                </div>
+                {%endif%}
+
             </div>
             {% endif %}
         </div>

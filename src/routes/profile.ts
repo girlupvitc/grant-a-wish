@@ -3,18 +3,19 @@ import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { getGrantedWishes, getUserInfo, getUsername } from "../queries";
 
-export default function cart(req: Request, res: Response, next: NextFunction) {
+export default function profile(req: Request, res: Response, next: NextFunction) {
     if (!req.params.uuid) return next(StatusCodes.BAD_REQUEST);
 
     const db: Database = req.app.get('db');
-    const granted = getGrantedWishes(db, req.params.uuid);
+    const username = getUsername(db, req.params.uuid);
+    if (!username) return next(StatusCodes.BAD_REQUEST);
+    const granted = getGrantedWishes(db, username);
 
     req.session.lastPage = 'profile';
 
-    res.render('cart', {
-        user: getUserInfo(db, getUsername(db, req.params.uuid)),
+    res.render('profile', {
+        loggedInUser: getUserInfo(db, req.session.username),
+        user: getUserInfo(db, username),
         granted
     })
-
-    next();
 }

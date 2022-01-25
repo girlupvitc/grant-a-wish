@@ -159,7 +159,7 @@ export const getUsername = (db: Database, uuid: string): string | null => {
 
 export const getGrantedWishes = (db: Database, username: string) => {
     const granted = db.prepare('select items from orders where user = ?').all(username);
-    const carts = granted.map(item => {
+    const carts = granted.map(row => row.items).map(item => {
         return JSON.parse(item);
     })
     return getCartItems(db, carts.flat());

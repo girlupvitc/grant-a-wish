@@ -133,6 +133,10 @@ img {
     object-fit: contain;
 }
 
+.nodecorate {
+    text-decoration: none;
+}
+
 @media not all and (hover: none) {
     .button:hover, button:hover, input[type=submit]:hover {
         font-weight: bold;

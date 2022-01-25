@@ -19,6 +19,7 @@ import viewWish from './routes/wishes/root';
 import Razorpay from 'razorpay';
 import { checkout } from './routes/cart/checkout';
 import confirmPayment from './routes/confirm-payment';
+import profile from './routes/profile';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
@@ -86,6 +87,10 @@ const setupWishes = (app: express.Express) => {
     app.get('/wishes/:uuid', viewWish);
 }
 
+const setupProfile = (app: express.Express) => {
+    app.get('/profile/:uuid', profile);
+}
+
 const setupRazorpay = (app: express.Express) => {
     const config = app.get('config file');
     const instance = new Razorpay({ key_id: config.RAZORPAY_KEY_ID, key_secret: config.RAZORPAY_KEY_SECRET });
@@ -93,7 +98,7 @@ const setupRazorpay = (app: express.Express) => {
 }
 
 const setupRoutes = (app: express.Express) => {
-    [setupHomepage, setupAdmin, setupCart, setupAuth, setupWishes].forEach(fn => {
+    [setupHomepage, setupAdmin, setupCart, setupAuth, setupWishes, setupProfile].forEach(fn => {
         fn(app);
     })
 }
@@ -117,8 +122,7 @@ export const createApp = () => {
     const config = getConfig();
     app.set('config file', config);
 
-    [
-        initLiquid,
+    [initLiquid,
         setupRazorpay,
         initSessions,
         setupMiddleware,
