@@ -8,7 +8,6 @@ const getOrderList = (db: Database, status: number | null) => {
     const query = status ?
         db.prepare('select uuid, amount, user, items, status from orders where status = ?').bind(status)
         : db.prepare('select uuid, amount, user, items, status from orders');
-    console.log(query);
     return query.all().map((item) => {
         item.items = JSON.parse(item.items);
         item.status = item.status === 1 ? 'Pending' : 'Complete'
@@ -24,6 +23,32 @@ const statusToNumber = (status: string) => {
     }
 }
 
+const mapFlashes = (flash: Record<string, any>, flashes: string[]) => {
+    const res: Record<string, boolean> = {};
+    for (const key of flashes) {
+        if (flash[key]) {
+            res[key] = true;
+        }
+    }
+
+    return res;
+}
+
+const clearFlashes = (flash: Record<string, any>, flashes: string[]) => {
+    const res: Record<string, boolean> = {};
+    for (const key of flashes) {
+        console.log(flash, key);
+        if (flash[key]) {
+            delete flash[key];
+        }
+        else {
+            console.log('erro')
+        }
+    }
+
+    return res;
+}
+
 export default function admin(req: Request, res: Response, next: NextFunction) {
     req.session.lastPage = 'admin';
     const db: Database = req.app.get('db');
@@ -32,11 +57,9 @@ export default function admin(req: Request, res: Response, next: NextFunction) {
         user: {
             name: req.session.name,
         },
-        wishCreated: req.session.flash?.wishCreated,
-        wishDeleted: req.session.flash?.wishDeleted,
+        ...mapFlashes(req.session.flash, ['wishCreated', 'wishDeleted', 'orderDeleted']),
         orders: getOrderList(db, statusToNumber(req.query.status as string) || null)
     });
 
-    if (req.session.flash?.wishCreated) delete req.session.flash.wishCreated;
-    if (req.session.flash?.wishDeleted) delete req.session.flash.wishDeleted;
+    clearFlashes(req.session.flash, ['wishCreated', 'wishDeleted', 'orderDeleted'])
 }
