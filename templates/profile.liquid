@@ -47,10 +47,15 @@
                         <div class='wish-description'>
                             {{ wish.description }}
                         </div>
-
+                        {% if loggedInUser and loggedInUser.uuid == user.uuid %}
                         <div class='wish-price'>
                             ₹{{ wish.price }}
                         </div>
+
+                        <div class='wish-actions'>
+                            <a class='button' href='/wishes/{{ wish.uuid }}'>Wish page</a>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endif %}
