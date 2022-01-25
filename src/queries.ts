@@ -89,7 +89,12 @@ export const setUserCart = (db: Database, username: string, contents: string[]) 
 }
 
 export const isAvailableWish = (db: Database, uuid: string) => {
-    const isValid = !!(db.prepare('select uuid from wishes where status = ? and uuid = ?').get(PAYMENT_STATUSES.Available, uuid));
+    const isAvailable = !!(db.prepare('select uuid from wishes where status = ? and uuid = ?').get(PAYMENT_STATUSES.Available, uuid));
+    return isAvailable;
+}
+
+export const isValidWish = (db: Database, uuid: string) => {
+    const isValid = !!(db.prepare('select uuid from wishes where uuid = ?').get(uuid));
     return isValid;
 }
 
