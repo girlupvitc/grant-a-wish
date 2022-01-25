@@ -19,7 +19,7 @@ export async function checkout(req: Request, res: Response, next: NextFunction) 
     if (options.conflictingItems.length === 0) {
         setCartStatus(db, cart, PAYMENT_STATUSES.Pending);
         const subTotal = getSubtotal(cartItems);
-        const orderId = createOrder(db, cart, req.session.username);
+        const orderId = createOrder(db, cart, subTotal, req.session.username);
 
         const razorPayOrderResponse = await razorpay.orders.create({
             amount: subTotal * 100 /* rupees to paise */,

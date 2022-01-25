@@ -56,6 +56,11 @@
                 credentials: 'same-origin'
             });
 
+            const replaceBody = async (res) => {
+                const text = await res.text();
+                document.body.innerHTML = text;
+            }
+
             window.addEventListener('DOMContentLoaded', () => {
                 const options = {
                     key: "{{ config.RAZORPAY_KEY_ID }}",
@@ -65,13 +70,14 @@
                     order_id: "{{ razorpayId }}",
                     handler: async (res) => {
                         console.log(orderId);
-                        const result = await postJson('/confirm-payment', {
+                        const result = await postJson('/payment', {
                             ok: true, orderId,
                             signature: res.razorpay_signature,
                             razorpayId: res.razorpay_order_id,
                             paymentId: res.razorpay_payment_id
                         })
                         if (result.redirected) window.location.href = result.url;
+                        else replaceBody(result);
                     },
                     theme: {
                         "color": "#B45F6D"
@@ -80,13 +86,14 @@
 
                 const razorpayClient = new Razorpay(options);
                 razorpayClient.on('payment.failed', async (res) => {
-                    const result = await postJson('/confirm-payment', {
+                    const result = await postJson('/payment', {
                         ok: false,
                         orderId,
                         err: res
                     })
 
                     if (result.redirected) window.location.href = result.url;
+                    else replaceBody(result);
                 })
 
                 document.querySelector('#rzp-button').onclick = () => {
@@ -94,7 +101,7 @@
                 };
 
                 document.querySelector('#cancel-button').onclick = async () => {
-                    const result = await postJson('/confirm-payment', {
+                    const result = await postJson('/payment', {
                         ok: false,
                         orderId,
                         err: {
@@ -106,10 +113,10 @@
                     })
 
                     if (result.redirected) window.location.href = result.url;
+                    else replaceBody(result);
                 }
             })
         </script>
-
         {% else %}
         <p>Looks like someone else already granted some of these wishes.</p>
 

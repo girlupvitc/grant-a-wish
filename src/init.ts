@@ -18,7 +18,7 @@ import cors from 'cors';
 import viewWish from './routes/wishes/root';
 import Razorpay from 'razorpay';
 import { checkout } from './routes/cart/checkout';
-import confirmPayment from './routes/confirm-payment';
+import handlePayment from './routes/payment';
 import profile from './routes/profile';
 
 const bsqlite3store = require('better-sqlite3-session-store');
@@ -60,8 +60,8 @@ const setupStatic = (app: express.Express) => {
 
 const setupHomepage = (app: express.Express) => {
     app.get('/', homepage);
-    app.use('/confirm-payment', ensureLoggedIn);
-    app.post('/confirm-payment', confirmPayment);
+    app.use('/payment', ensureLoggedIn);
+    app.post('/payment', handlePayment);
 }
 
 const setupAuth = (app: express.Express) => {

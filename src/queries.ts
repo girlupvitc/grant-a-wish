@@ -14,6 +14,7 @@ export const initDb = (db: Database) => {
 
     db.prepare(`create table if not exists orders(
         uuid unique primary key,
+        amount integer not null,
         user text not null,
         items text not null,
         status text not null,
@@ -79,8 +80,9 @@ export const getCartItems = (db: Database, cart: string[]) => {
     return cartItems;
 }
 
-export const getUserCart = (db: Database, username: string): string[] => {
+export const getUserCart = (db: Database, username: string): string[] | null => {
     const res = db.prepare('select cart from users where username = ?').get(username);
+    if (!res) return null;
     return JSON.parse(res.cart);
 }
 
@@ -126,12 +128,13 @@ export const setOrderStatus = (db: Database, uuid: string, status: 0 | 1 | 2) =>
 
 export const deleteOrder = (db: Database, uuid: string) => {
     db.prepare('delete from orders where uuid = ?').run(uuid);
+    console.log(uuid);
 }
 
-export const createOrder = (db: Database, cart: string[], user: string) => {
+export const createOrder = (db: Database, cart: string[], subtotal: number, user: string) => {
     const id = v4();
-    db.prepare(`insert into orders(uuid, user, items, status) values(?, ?, ?, ?)`)
-        .run(id, user, JSON.stringify(cart), PAYMENT_STATUSES.Pending);
+    db.prepare(`insert into orders(uuid, user, items, status, amount) values(?, ?, ?, ?, ?)`)
+        .run(id, user, JSON.stringify(cart), PAYMENT_STATUSES.Pending, subtotal);
 
     return id;
 }
@@ -158,9 +161,21 @@ export const getUsername = (db: Database, uuid: string): string | null => {
 }
 
 export const getGrantedWishes = (db: Database, username: string) => {
-    const granted = db.prepare('select items from orders where user = ?').all(username);
+    const granted = db.prepare('select items from orders where user = ? and status = ?').all(username, PAYMENT_STATUSES.Successful);
     const carts = granted.map(row => row.items).map(item => {
         return JSON.parse(item);
     })
     return getCartItems(db, carts.flat());
+}
+
+export const getOrderDetails = (db: Database, orderId: string) => {
+    const result = db.prepare('select amount, uuid, items, status, user, razorpay_order_id from orders where uuid = ?').get(orderId);
+
+    if (!result) return null;
+
+    result.razorpayId = result.razorpay_order_id;
+    result.items = JSON.parse(result.items);
+    delete result.razorpay_order_id;
+
+    return result;
 }

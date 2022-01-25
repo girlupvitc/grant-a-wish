@@ -1,0 +1,43 @@
+<body>
+    <style>
+        /* something keeps setting it to hidden */
+        body {
+            overflow: auto !important;
+        }
+    </style>
+    <div class="body-content">
+        <h1>Payment {% if success %}successful{% else %}failed{%endif%}</h1>
+
+        <p>Your payment to GirlUp for ₹{{ amount }} {% if success %}was successful{% else %}has failed{%endif%}.</p>
+        {% if reason %}
+        <p>Reason: <code>{{ reason }}</code></p>
+        {% endif %}
+
+        {% if err %}
+        If any money was debited from your account, it will be refunded automatically.
+        <a href='/contact'>Contact us if problems persist.</a>
+        {% endif %}
+
+        <details>
+            <summary>Details</summary>
+            <div class="details-body">
+                {% if errString %}
+                <pre>{{ errString }}</pre>
+                {% else %}
+                <ul>
+                    <li>
+                        <strong>Order ID:</strong> <code>{{ orderId }}</code>
+                    </li>
+                    <li>
+                        <strong>Payment ID:</strong> <code>{{ paymentId }}</code>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </details>
+
+        <p>
+            <a href='/'>Go home</a>
+        </p>
+    </div>
+</body>

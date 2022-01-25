@@ -137,6 +137,12 @@ img {
     text-decoration: none;
 }
 
+pre {
+    overflow-x: auto;
+    padding: 0.4rem;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
 @media not all and (hover: none) {
     .button:hover, button:hover, input[type=submit]:hover {
         font-weight: bold;
