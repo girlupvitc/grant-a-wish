@@ -6,4 +6,3 @@
 - add faqs and partners
 - switch to real credentials
 - set up domain
-- sort by price

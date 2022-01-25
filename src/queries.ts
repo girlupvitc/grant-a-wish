@@ -72,6 +72,7 @@ export const getWishes = (db: Database, filters?: {
         from wishes 
         where price between ? and ? 
         and status = ?
+        order by price asc
     `).all(min, max, PAYMENT_STATUSES.Available);
 
     return result;
