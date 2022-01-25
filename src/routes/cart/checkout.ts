@@ -1,5 +1,6 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 import { createOrder, getCartItems, getUserCart, getConflictingItems, setCartStatus, setRazorpayOrderId } from "../../queries";
 import { CartItem, Config, getSubtotal, PAYMENT_STATUSES } from "../../utils";
 import { removeCartItem } from "./remove";
@@ -7,7 +8,10 @@ import { removeCartItem } from "./remove";
 export async function checkout(req: Request, res: Response, next: NextFunction) {
     const db: Database = req.app.get('db');
     const razorpay = req.app.get('razorpay');
+
     const cart = getUserCart(db, req.session.username);
+    if (!cart) return next(StatusCodes.BAD_REQUEST);
+
     const cartItems = getCartItems(db, cart);
     const cfg: Config = req.app.get('config file');
 
@@ -20,6 +24,10 @@ export async function checkout(req: Request, res: Response, next: NextFunction) 
         setCartStatus(db, cart, PAYMENT_STATUSES.Pending);
         const subTotal = getSubtotal(cartItems);
         const orderId = createOrder(db, cart, subTotal, req.session.username);
+
+        if (!subTotal || !orderId) {
+            return next(StatusCodes.BAD_REQUEST);
+        }
 
         const razorPayOrderResponse = await razorpay.orders.create({
             amount: subTotal * 100 /* rupees to paise */,
