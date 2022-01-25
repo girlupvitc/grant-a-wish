@@ -146,5 +146,21 @@ pre {
 @media not all and (hover: none) {
     .button:hover, button:hover, input[type=submit]:hover {
         font-weight: bold;
+    }    
+}
+
+@media screen and (max-aspect-ratio: 1/1) {
+    .form-group {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    textarea {
+        min-width: 30ch;
+    }
+
+    .body-content > * {
+        margin-left: 0.3rem;
     }
 }
