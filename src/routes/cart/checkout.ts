@@ -1,7 +1,7 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { createOrder, getCartItems, getUserCart, getConflictingItems, setCartStatus, setRazorpayOrderId } from "../../queries";
+import { createOrder, getCartItems, getUserCart, getConflictingItems, setCartStatus, setRazorpayOrderId, getUserInfo, startUserCheckout } from "../../queries";
 import { CartItem, Config, getSubtotal, PAYMENT_STATUSES } from "../../utils";
 import { removeCartItem } from "./remove";
 
@@ -18,9 +18,11 @@ export async function checkout(req: Request, res: Response, next: NextFunction) 
     const options: Record<string, any> = {
         conflictingItems: getConflictingItems(db, cart),
         config: cfg,
+        user: getUserInfo(db, req.session.username)
     }
 
     if (options.conflictingItems.length === 0) {
+        startUserCheckout(db, req.session.username);
         setCartStatus(db, cart, PAYMENT_STATUSES.Pending);
         const subTotal = getSubtotal(cartItems);
         const orderId = createOrder(db, cart, subTotal, req.session.username);

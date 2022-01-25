@@ -28,7 +28,6 @@
 <body>
     <div class='header'>
         <span>Welcome, {{ user.name }}</span>
-        <span class='right'><a href='/'>Back</a></span>
     </div>
 
     <div class='body-content'>
@@ -69,7 +68,6 @@
                     name: "GirlUp One Simple Wish",
                     order_id: "{{ razorpayId }}",
                     handler: async (res) => {
-                        console.log(orderId);
                         const result = await postJson('/payment', {
                             ok: true, orderId,
                             signature: res.razorpay_signature,

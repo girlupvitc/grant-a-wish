@@ -9,7 +9,8 @@ export const initDb = (db: Database) => {
         username text unique primary key,
         uuid text unique not null,
         name text,
-        cart text not null
+        cart text not null,
+        checking_out integer default 0
     ) STRICT`).run();
 
     db.prepare(`create table if not exists orders(
@@ -138,7 +139,6 @@ export const setOrderStatus = (db: Database, uuid: string, status: 0 | 1 | 2) =>
 
 export const deleteOrder = (db: Database, uuid: string) => {
     db.prepare('delete from orders where uuid = ?').run(uuid);
-    console.log(uuid);
 }
 
 export const createOrder = (db: Database, cart: string[], subtotal: number, user: string) => {
@@ -161,9 +161,9 @@ export function isPendingOrder(db: Database, orderId: string) {
 export const getUserInfo = (db: Database, username: string | undefined) => {
     if (!username) return null;
     const cart = getUserCart(db, username);
-    const meta = db.prepare('select name, uuid from users where username = ?').get(username);
+    const meta = db.prepare('select name, uuid, checking_out from users where username = ?').get(username);
 
-    return { cart, name: meta.name, uuid: meta.uuid };
+    return { cart, name: meta.name, uuid: meta.uuid, checkingOut: meta.checking_out };
 }
 
 export const getUsername = (db: Database, uuid: string): string | null => {
@@ -190,7 +190,20 @@ export const getOrderDetails = (db: Database, orderId: string) => {
     return result;
 }
 
+export const cancelOrder = (db: Database, orderId: string, items: string[]) => {
+    setCartStatus(db, items, PAYMENT_STATUSES.Available);
+    deleteOrder(db, orderId);
+}
+
 export const getWishCount = (db: Database) => {
     const result = db.prepare('select count(status) as count from wishes where status = ?').get(PAYMENT_STATUSES.Successful);
     return result.count;
+}
+
+export const startUserCheckout = (db: Database, username: string) => {
+    db.prepare('update users set checking_out = 1 where username = ?').run(username);
+}
+
+export const stopUserCheckout = (db: Database, username: string) => {
+    db.prepare('update users set checking_out = 0 where username = ?').run(username);
 }

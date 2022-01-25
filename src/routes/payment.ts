@@ -1,7 +1,7 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { deleteOrder, getOrderDetails, getUserCart, isPendingOrder, setCartStatus, setOrderStatus, setUserCart } from "../queries";
+import { cancelOrder, getOrderDetails, getUserCart, isPendingOrder, setCartStatus, setOrderStatus, setUserCart, stopUserCheckout } from "../queries";
 import { Config, PAYMENT_STATUSES } from "../utils";
 import crypto from 'crypto';
 
@@ -25,36 +25,37 @@ export default async function handlePayment(req: Request, res: Response, next: N
 
     if (!cart || !req.body.orderId) return next(StatusCodes.BAD_REQUEST);
 
-    const cancelOrder = () => {
-        setCartStatus(db, cart, PAYMENT_STATUSES.Available);
-        deleteOrder(db, req.body.orderId);
-    }
-
     if (!req.body.orderId || !isPendingOrder(db, req.body.orderId)) {
-        cancelOrder();
+        cancelOrder(db, req.body.orderId, cart);
+        stopUserCheckout(db, req.session.username);
         return next(StatusCodes.BAD_REQUEST);
     }
 
     const orderDetails = getOrderDetails(db, req.body.orderId);
 
     if (!req.body.ok) {
-        cancelOrder();
+        cancelOrder(db, req.body.orderId, cart);
         options.err = JSON.stringify(req.body.err);
     }
     else {
         if (!verifySignature(req.body.razorpayId, req.body.paymentId, req.body.signature, config)) {
-            cancelOrder();
+            cancelOrder(db, req.body.orderId, cart);
+            stopUserCheckout(db, req.session.username);
             return next(StatusCodes.BAD_REQUEST);
         }
+
         setCartStatus(db, cart, PAYMENT_STATUSES.Successful);
         setUserCart(db, req.session.username, []);
         setOrderStatus(db, req.body.orderId, PAYMENT_STATUSES.Successful);
     }
 
+    stopUserCheckout(db, req.session.username);
+
     if (typeof options.err === 'string') {
         options.err = JSON.parse(options.err);
         options.errString = JSON.stringify(options.err, undefined, 4);
     }
+
     res.render('payment', {
         orderId: req.body.orderId,
         paymentId: req.body.paymentId,
