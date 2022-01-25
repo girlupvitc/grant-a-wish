@@ -31,8 +31,9 @@
     </div>
 
     <div class='body-content'>
-        <h1>Cart</h1>
-        <h2>({{ cartItems.length }} {% if cartItems.length != 1 %}items{% else %}item{% endif %})</h2>
+        <h1>
+            Cart ({{ cartItems.length }} {% if cartItems.length != 1 %}items{% else %}item{% endif %})
+        </h1>
         <div class='wishes'>
             {% if cartItems.length > 0 %}
             <div class='wishes'>
