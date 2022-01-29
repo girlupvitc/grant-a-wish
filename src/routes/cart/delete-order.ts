@@ -23,7 +23,13 @@ export default function handleOrderDeletion(req: Request, res: Response, next: N
     cancelOrder(db, req.params.uuid, order.items);
     stopUserCheckout(db, order.user);
     req.session.flash = { orderDeleted: true, ...req.session.flash };
-
-    if (isAdmin(config, req.session.username)) res.redirect('/admin');
-    else res.redirect('/');
+    if (req.session.lastPage === 'profile') {
+        res.redirect('/cart');
+    }
+    else if (isAdmin(config, req.session.username)) {
+        res.redirect('/admin');
+    }
+    else {
+        res.redirect('/');
+    }
 }
