@@ -2,7 +2,7 @@ import { Database } from "better-sqlite3"
 import { isNumber } from "liquidjs/dist/util/underscore";
 import { CartItem, PAYMENT_STATUSES } from "./utils";
 import { v4 } from 'uuid';
-import e from "express";
+import { Express } from "express";
 
 export const initDb = (db: Database) => {
     db.prepare(`create table if not exists users(
@@ -37,8 +37,8 @@ export const createUser = (db: Database, details: {
 }) => {
     const uuid = v4();
     db.prepare(`insert or ignore into 
-        users(username, uuid, name, cart)
-        values(?, ?, ?, ?)
+        users(username, uuid, name, cart, checking_out)
+        values(?, ?, ?, ?, 0)
     `).run(details.email, uuid, details.name, '[]');
 }
 
@@ -163,7 +163,9 @@ export const getUserInfo = (db: Database, username: string | undefined) => {
     const cart = getUserCart(db, username);
     const meta = db.prepare('select name, uuid, checking_out from users where username = ?').get(username);
 
-    return { cart, name: meta.name, uuid: meta.uuid, checkingOut: meta.checking_out };
+    console.log(meta);
+
+    return { cart, name: meta.name, uuid: meta.uuid, isCheckingOut: meta.checking_out };
 }
 
 export const getUsername = (db: Database, uuid: string): string | null => {
@@ -206,4 +208,8 @@ export const startUserCheckout = (db: Database, username: string) => {
 
 export const stopUserCheckout = (db: Database, username: string) => {
     db.prepare('update users set checking_out = 0 where username = ?').run(username);
+}
+
+export function getPendingOrder(db: Database, user: string) {
+    return db.prepare('select uuid from orders where user = ?').get(user)?.uuid || null;
 }

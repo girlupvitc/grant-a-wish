@@ -2,7 +2,7 @@ import { Database } from 'better-sqlite3';
 import { NextFunction, Request, Response } from 'express';
 import { getAuthUrl } from '../gauth';
 import { getUserInfo, getWishCount, getWishes } from '../queries';
-import { Config } from '../utils';
+import { Config, isAdmin } from '../utils';
 
 const toArray = (number: number) => {
     return number.toString().split('');
@@ -23,7 +23,7 @@ const homepage = (req: Request, res: Response, next: NextFunction) => {
         filtered: typeof req.query['price-min'] === 'string' || typeof req.query['price-max'] === 'string',
         user: getUserInfo(db, req.session.username),
         authUrl: getAuthUrl(config),
-        admin: config.ADMINS.includes(req.session.username),
+        admin: isAdmin(config, req.session.username),
         wishCount,
         wishCountArray: toArray(wishCount)
     });

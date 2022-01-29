@@ -21,6 +21,13 @@ export async function checkout(req: Request, res: Response, next: NextFunction) 
         user: getUserInfo(db, req.session.username)
     }
 
+    if (options.user.isCheckingOut) {
+        return next({
+            code: StatusCodes.CONFLICT,
+            msg: 'Initiating checkout failed because you already have an order in progress.'
+        });
+    }
+
     if (options.conflictingItems.length === 0) {
         startUserCheckout(db, req.session.username);
         setCartStatus(db, cart, PAYMENT_STATUSES.Pending);

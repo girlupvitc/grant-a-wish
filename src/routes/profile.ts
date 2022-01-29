@@ -1,7 +1,7 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { getGrantedWishes, getUserInfo, getUsername } from "../queries";
+import { getGrantedWishes, getPendingOrder, getUserInfo, getUsername } from "../queries";
 
 export default function profile(req: Request, res: Response, next: NextFunction) {
     if (!req.params.uuid) return next(StatusCodes.BAD_REQUEST);
@@ -10,12 +10,16 @@ export default function profile(req: Request, res: Response, next: NextFunction)
     const username = getUsername(db, req.params.uuid);
     if (!username) return next(StatusCodes.BAD_REQUEST);
     const granted = getGrantedWishes(db, username);
+    const pendingOrder = getPendingOrder(db, req.session.username);
+
+    if (!pendingOrder) return next(400);
 
     req.session.lastPage = 'profile';
 
     res.render('profile', {
         loggedInUser: getUserInfo(db, req.session.username),
         user: getUserInfo(db, username),
-        granted
+        granted,
+        pendingOrder
     })
 }

@@ -1,6 +1,6 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
-import { getCartItems, getUserCart } from "../../queries";
+import { getCartItems, getUserCart, getUserInfo } from "../../queries";
 import { CartItem, getSubtotal } from "../../utils";
 
 export default function cart(req: Request, res: Response, next: NextFunction) {
@@ -12,9 +12,7 @@ export default function cart(req: Request, res: Response, next: NextFunction) {
     req.session.lastPage = 'cart';
 
     res.render('cart', {
-        user: {
-            name: req.session.name
-        },
+        user: getUserInfo(db, req.session.username),
         cartItems,
         subTotal: getSubtotal(cartItems)
     })

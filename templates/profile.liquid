@@ -33,6 +33,14 @@
         <h1>{% if loggedInUser and loggedInUser.uuid == user.uuid %}Your{% else %}{{ user.name }}'s{% endif %} Profile
         </h1>
 
+        {% if user.isCheckingOut and loggedInUser.uuid == user.uuid %}
+        <h2>Pending order</h2>
+        <code>{{ pendingOrder }}</code>
+        <p>
+            <a href='/cart/delete-order/{{ pendingOrder }}'>Cancel order</a> to continue.
+        </p>
+        {% endif %}
+
         <h2>Wishes granted: {{ granted.length }}</h2>
         <div class='wishes'>
             {% if granted.length > 0 %}

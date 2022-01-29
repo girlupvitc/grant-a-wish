@@ -29,6 +29,10 @@ export const PAYMENT_STATUSES: {
     Successful: 2
 }
 
+export const isAdmin = (config: Config, username: string) => {
+    return config.ADMINS.includes(username);
+}
+
 export const getConfig = () => {
     try {
         const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));

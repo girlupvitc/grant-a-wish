@@ -21,14 +21,16 @@ import { checkout } from './routes/cart/checkout';
 import handlePayment from './routes/payment';
 import profile from './routes/profile';
 import handleWishDeletion from './routes/admin/wishes/delete';
-import handleOrderDeletion from './routes/admin/orders/delete';
+import handleOrderDeletion from './routes/cart/delete-order';
 
 const bsqlite3store = require('better-sqlite3-session-store');
 const sessions = require('express-session');
 const SqliteStore = bsqlite3store(sessions);
 
 const initLiquid = (app: express.Express) => {
-    const engine = new Liquid();
+    const engine = new Liquid({
+        jsTruthy: true
+    });
     app.engine('liquid', engine.express());
     app.set('views', './templates');
     app.set('view engine', 'liquid');
@@ -77,6 +79,7 @@ const setupCart = (app: express.Express) => {
     app.get('/cart/add/:uuid', addToCart);
     app.get('/cart/remove/:uuid', removeFromCart);
     app.get('/cart/checkout', checkout);
+    app.get('/cart/delete-order/:uuid', handleOrderDeletion);
 }
 
 const setupAdmin = (app: express.Express) => {
@@ -84,7 +87,6 @@ const setupAdmin = (app: express.Express) => {
     app.get('/admin', admin);
     app.post('/admin/new-wish', newWish);
     app.get('/admin/wishes/delete/:uuid', handleWishDeletion);
-    app.get('/admin/orders/delete/:uuid', handleOrderDeletion);
 }
 
 const setupWishes = (app: express.Express) => {

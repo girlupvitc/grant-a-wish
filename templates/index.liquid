@@ -49,7 +49,7 @@
         <h1>GirlUp - One Simple Wish</h1>
 
         <div class='sr-only'>
-            {{ wishCount }}
+            {{ wishCount }} wishes granted.
         </div>
 
         <div class='odometer' aria-hidden="true">
@@ -68,6 +68,7 @@
             Through this event, we aim to provide each child with one item of their choice.
         </p>
 
+        {% unless user.isCheckingOut %}
         <h2>Wishes</h2>
         <details id='wishes-filter' {% if filtered%} open {% endif %}>
             <summary>Filter</summary>
@@ -138,6 +139,12 @@
                 No wishes could be found matching the given criteria.
             </div>
         </div>
+        {% endif %}
+        {%endunless%}
+
+        {% if user.isCheckingOut %}
+        <h2>Pending order</h2>
+        You have a pending order, and must <a href='/profile/{{ user.uuid }}'>cancel</a> it before you continue.
         {% endif %}
 
         <h2>FAQs</h2>
