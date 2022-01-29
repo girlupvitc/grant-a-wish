@@ -12,24 +12,18 @@ export default function handleOrderDeletion(req: Request, res: Response, next: N
     }
 
     const order = getOrderDetails(db, req.params.uuid);
-    if (!order || req.session.username !== order.user && !isAdmin(config, req.session.username)) {
-        return next({ code: StatusCodes.FORBIDDEN });
-    }
-    if (!order || order.status === PAYMENT_STATUSES.Successful) {
+    if (
+        !order || // invalid order
+        (req.session.username !== order.user && !isAdmin(config, req.session.username)) || // not an admin and didnt create the order
+        order.status === PAYMENT_STATUSES.Successful // order is successful, cannot be cancelled
+    ) {
         return next({ code: StatusCodes.BAD_REQUEST });
     }
 
     cancelOrder(db, req.params.uuid, order.items);
     stopUserCheckout(db, order.user);
-    req.session.flash = {
-        orderDeleted: true,
-        ...req.session.flash
-    };
+    req.session.flash = { orderDeleted: true, ...req.session.flash };
 
-    if (isAdmin(config, req.session.username)) {
-        res.redirect('/admin');
-    }
-    else {
-        res.redirect('/');
-    }
+    if (isAdmin(config, req.session.username)) res.redirect('/admin');
+    else res.redirect('/');
 }
