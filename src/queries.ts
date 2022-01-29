@@ -163,8 +163,6 @@ export const getUserInfo = (db: Database, username: string | undefined) => {
     const cart = getUserCart(db, username);
     const meta = db.prepare('select name, uuid, checking_out from users where username = ?').get(username);
 
-    console.log(meta);
-
     return { cart, name: meta.name, uuid: meta.uuid, isCheckingOut: meta.checking_out };
 }
 

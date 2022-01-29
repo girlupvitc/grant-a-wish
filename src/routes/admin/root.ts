@@ -37,12 +37,8 @@ const mapFlashes = (flash: Record<string, any>, flashes: string[]) => {
 const clearFlashes = (flash: Record<string, any>, flashes: string[]) => {
     const res: Record<string, boolean> = {};
     for (const key of flashes) {
-        console.log(flash, key);
         if (flash && flash[key]) {
             delete flash[key];
-        }
-        else {
-            console.log('erro')
         }
     }
 
