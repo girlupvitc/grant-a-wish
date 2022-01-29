@@ -88,7 +88,8 @@
         <div class='cart-actions'>
             {% if cartItems.length > 0 %}
             {% if user.isCheckingOut %}
-            You've started a payment but not finished it. Cancel it and restart checkout.
+            You've started a payment but not finished it.
+            <a href="/profile/{{ user.uuid }}" class="href">Cancel it</a> and restart checkout.
             {% else %}
             <a class='button' href='/cart/checkout'>Check out</a>
             {% endif %}
