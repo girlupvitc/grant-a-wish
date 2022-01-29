@@ -20,10 +20,10 @@ export default function removeFromCart(req: Request, res: Response, next: NextFu
     const cart = getUserCart(db, req.session.username);
 
     const id = req.params.uuid;
-    if (!id) return next(400);
+    if (!id) return next({ code: 400 });
 
     if (!removeCartItem(db, req.session.username, id)) {
-        return next(400);
+        return next({ code: 400 });
     }
 
     if (req.session.lastPage === 'cart') {

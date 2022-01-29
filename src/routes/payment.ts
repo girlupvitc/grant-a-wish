@@ -23,12 +23,18 @@ export default async function handlePayment(req: Request, res: Response, next: N
         orderId: req.body.orderId,
     }
 
-    if (!cart || !req.body.orderId) return next(StatusCodes.BAD_REQUEST);
+    if (!cart || !req.body.orderId) return next({
+        code: StatusCodes.BAD_REQUEST,
+        msg: 'Invalid order ID supplied.'
+    });
 
     if (!req.body.orderId || !isPendingOrder(db, req.body.orderId)) {
         cancelOrder(db, req.body.orderId, cart);
         stopUserCheckout(db, req.session.username);
-        return next(StatusCodes.BAD_REQUEST);
+        return next({
+            code: StatusCodes.BAD_REQUEST,
+            msg: 'Invalid order ID supplied.'
+        });
     }
 
     const orderDetails = getOrderDetails(db, req.body.orderId);
@@ -41,7 +47,10 @@ export default async function handlePayment(req: Request, res: Response, next: N
         if (!verifySignature(req.body.razorpayId, req.body.paymentId, req.body.signature, config)) {
             cancelOrder(db, req.body.orderId, cart);
             stopUserCheckout(db, req.session.username);
-            return next(StatusCodes.BAD_REQUEST);
+            return next({
+                code: StatusCodes.BAD_REQUEST,
+                msg: 'Signature verification failed.'
+            });
         }
 
         setCartStatus(db, cart, PAYMENT_STATUSES.Successful);

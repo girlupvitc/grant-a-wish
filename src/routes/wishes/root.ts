@@ -7,7 +7,7 @@ export default function viewWish(req: Request, res: Response, next: NextFunction
     const db: Database = req.app.get('db');
 
     if (!req.params.uuid) {
-        return next(400);
+        return next({ code: 400 });
     }
 
     const config: Config = req.app.get('config file');
@@ -16,7 +16,7 @@ export default function viewWish(req: Request, res: Response, next: NextFunction
     if (isValidWish(db, req.params.uuid)) {
         req.session.lastPage = `/wishes/${req.params.uuid}`;
         const wish = getWish(db, req.params.uuid);
-        if (!wish) return next(400);
+        if (!wish) return next({ code: 500 });
         const options: Record<string, any> = {
             wish, isAdmin
         };
@@ -24,6 +24,6 @@ export default function viewWish(req: Request, res: Response, next: NextFunction
         res.render('wish', options);
     }
     else {
-        return next(400);
+        return next({ code: 500 });
     }
 }

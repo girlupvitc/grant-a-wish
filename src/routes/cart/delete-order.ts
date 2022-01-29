@@ -1,5 +1,6 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 import { cancelOrder, getOrderDetails, stopUserCheckout } from "../../queries";
 import { Config, isAdmin, PAYMENT_STATUSES } from "../../utils";
 
@@ -7,15 +8,15 @@ export default function handleOrderDeletion(req: Request, res: Response, next: N
     const db: Database = req.app.get('db');
     const config: Config = req.app.get('config file');
     if (!req.params.uuid) {
-        return next(400);
+        return next({ code: StatusCodes.INTERNAL_SERVER_ERROR, msg: 'Invalid order ID supplied.' });
     }
 
     const order = getOrderDetails(db, req.params.uuid);
     if (!order || req.session.username !== order.user && !isAdmin(config, req.session.username)) {
-        return next(403);
+        return next({ code: StatusCodes.FORBIDDEN });
     }
     if (!order || order.status === PAYMENT_STATUSES.Successful) {
-        return next(400);
+        return next({ code: StatusCodes.BAD_REQUEST });
     }
 
     cancelOrder(db, req.params.uuid, order.items);

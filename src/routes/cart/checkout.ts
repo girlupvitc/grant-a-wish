@@ -10,7 +10,7 @@ export async function checkout(req: Request, res: Response, next: NextFunction) 
     const razorpay = req.app.get('razorpay');
 
     const cart = getUserCart(db, req.session.username);
-    if (!cart) return next(StatusCodes.BAD_REQUEST);
+    if (!cart) return next({ code: StatusCodes.INTERNAL_SERVER_ERROR, msg: 'Getting cart failed.' });
 
     const cartItems = getCartItems(db, cart);
     const cfg: Config = req.app.get('config file');
@@ -35,7 +35,10 @@ export async function checkout(req: Request, res: Response, next: NextFunction) 
         const orderId = createOrder(db, cart, subTotal, req.session.username);
 
         if (!subTotal || !orderId) {
-            return next(StatusCodes.BAD_REQUEST);
+            return next({
+                code: StatusCodes.INTERNAL_SERVER_ERROR,
+                msg: 'Order creation failed.'
+            });
         }
 
         const razorPayOrderResponse = await razorpay.orders.create({

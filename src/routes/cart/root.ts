@@ -6,7 +6,7 @@ import { CartItem, getSubtotal } from "../../utils";
 export default function cart(req: Request, res: Response, next: NextFunction) {
     const db: Database = req.app.get('db');
     const cart = getUserCart(db, req.session.username);
-    if (!cart) return next(500);
+    if (!cart) return next({ code: 500 });
     const cartItems: CartItem[] = getCartItems(db, cart);
 
     req.session.lastPage = 'cart';

@@ -1,5 +1,6 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 import { getUserCart, isAvailableWish, setUserCart } from "../../queries";
 
 export default function addToCart(req: Request, res: Response, next: NextFunction) {
@@ -7,15 +8,24 @@ export default function addToCart(req: Request, res: Response, next: NextFunctio
     const cart = getUserCart(db, req.session.username);
 
     const id = req.params.uuid;
-    if (!id) return next(400);
-    if (!cart) return next(500);
+    if (!id) return next({
+        code: StatusCodes.BAD_REQUEST,
+        msg: 'Invalid ID supplied.'
+    });
+    if (!cart) return next({
+        code: StatusCodes.INTERNAL_SERVER_ERROR,
+        msg: 'Getting cart failed.'
+    });
 
     if (isAvailableWish(db, id)) {
         cart.push(id);
         setUserCart(db, req.session.username, cart);
     }
     else {
-        return next(400);
+        return next({
+            code: StatusCodes.BAD_REQUEST,
+            msg: 'That wish has already been granted.'
+        });
     }
     if (req.session.lastPage?.startsWith('/wishes/')) {
         res.redirect(req.session.lastPage);
