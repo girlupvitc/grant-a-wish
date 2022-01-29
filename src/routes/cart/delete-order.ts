@@ -13,9 +13,9 @@ export default function handleOrderDeletion(req: Request, res: Response, next: N
 
     const order = getOrderDetails(db, req.params.uuid);
     if (
-        !order || // invalid order
-        (req.session.username !== order.user && !isAdmin(config, req.session.username)) || // not an admin and didnt create the order
-        order.status === PAYMENT_STATUSES.Successful // order is successful, cannot be cancelled
+        !order // invalid order
+        || !(req.session.username === order.user || isAdmin(config, req.session.username)) // not an admin and didnt create the order 
+        || order.status === PAYMENT_STATUSES.Successful // order is successful, cannot be cancelled
     ) {
         return next({ code: StatusCodes.BAD_REQUEST });
     }

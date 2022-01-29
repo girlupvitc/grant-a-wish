@@ -211,5 +211,6 @@ export const stopUserCheckout = (db: Database, username: string) => {
 }
 
 export function getPendingOrder(db: Database, user: string) {
-    return db.prepare('select uuid from orders where user = ?').get(user)?.uuid || null;
+    return db.prepare('select uuid from orders where user = ? and status = ?')
+        .get(user, PAYMENT_STATUSES.Pending)?.uuid || null;
 }
