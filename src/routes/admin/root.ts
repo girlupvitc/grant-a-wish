@@ -1,6 +1,6 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
-import { CartItem } from "../../utils";
+import { CartItem, clearFlashes, mapFlashes } from "../../utils";
 
 
 
@@ -21,28 +21,6 @@ const statusToNumber = (status: string) => {
         case 'complete': return 2;
         default: return null;
     }
-}
-
-const mapFlashes = (flash: Record<string, any>, flashes: string[]) => {
-    const res: Record<string, boolean> = {};
-    for (const key of flashes) {
-        if (flash && flash[key]) {
-            res[key] = true;
-        }
-    }
-
-    return res;
-}
-
-const clearFlashes = (flash: Record<string, any>, flashes: string[]) => {
-    const res: Record<string, boolean> = {};
-    for (const key of flashes) {
-        if (flash && flash[key]) {
-            delete flash[key];
-        }
-    }
-
-    return res;
 }
 
 export default function admin(req: Request, res: Response, next: NextFunction) {

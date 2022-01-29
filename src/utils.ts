@@ -66,3 +66,25 @@ export const die = (msg: any, code = 1) => {
     console.error(msg);
     process.exit(code);
 }
+
+export const mapFlashes = (flash: Record<string, any>, flashes: string[]) => {
+    const res: Record<string, boolean> = {};
+    for (const key of flashes) {
+        if (flash && flash[key]) {
+            res[key] = true;
+        }
+    }
+
+    return res;
+}
+
+export const clearFlashes = (flash: Record<string, any>, flashes: string[]) => {
+    const res: Record<string, boolean> = {};
+    for (const key of flashes) {
+        if (flash && flash[key]) {
+            delete flash[key];
+        }
+    }
+
+    return res;
+}
