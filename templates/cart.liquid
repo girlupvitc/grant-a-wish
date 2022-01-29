@@ -52,9 +52,11 @@
                         </div>
 
                         <div class='wish-actions'>
+                            {% unless user.isCheckingOut %}
                             <a class='button' href='/cart/remove/{{ wish.uuid }}'>
                                 Remove from cart
                             </a>
+                            {% endunless %}
 
                             <a class='button' href='/wishes/{{ wish.uuid }}'>
                                 Learn more

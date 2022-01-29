@@ -1,6 +1,6 @@
 import { Database } from "better-sqlite3";
 import { NextFunction, Request, Response } from "express";
-import { getUserCart, setUserCart } from "../../queries";
+import { getUserCart, getUserInfo, setUserCart } from "../../queries";
 
 export const removeCartItem = (db: Database, user: string, uuid: string) => {
     const cart = getUserCart(db, user);
@@ -17,7 +17,11 @@ export const removeCartItem = (db: Database, user: string, uuid: string) => {
 
 export default function removeFromCart(req: Request, res: Response, next: NextFunction) {
     const db: Database = req.app.get('db');
-    const cart = getUserCart(db, req.session.username);
+    const user = getUserInfo(db, req.session.username);
+    if (!user) return next({ code: 500 });
+    if (user?.isCheckingOut) {
+        return next({ code: 403, msg: "Checkout in progress." });
+    }
 
     const id = req.params.uuid;
     if (!id) return next({ code: 400 });
