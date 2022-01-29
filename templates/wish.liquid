@@ -37,6 +37,7 @@
 
             {% if wish.status == 0 %}
             {% if user.cart contains wish.uuid %}
+            {% unless user.isCheckingOut %}
             <a class='button' href='/cart/remove/{{ wish.uuid }}'>
                 Remove from cart
             </a>
@@ -44,6 +45,7 @@
             <a class='button' href='/cart/add/{{ wish.uuid }}'>
                 Add to cart
             </a>
+            {% endunless %}
             {% endif %}
 
             {% elsif wish.status == 1 %}
