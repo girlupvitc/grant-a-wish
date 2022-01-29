@@ -68,6 +68,12 @@
             Through this event, we aim to provide each child with one item of their choice.
         </p>
 
+        {% if orderDeleted %}
+        <p>
+            Order deleted successfully.
+        </p>
+        {%endif%}
+
         {% unless user.isCheckingOut %}
         <h2>Wishes</h2>
         <details id='wishes-filter' {% if filtered%} open {% endif %}>

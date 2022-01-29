@@ -34,6 +34,13 @@
         <h1>
             Cart ({{ cartItems.length }} {% if cartItems.length != 1 %}items{% else %}item{% endif %})
         </h1>
+
+        {% if orderDeleted %}
+        <p>
+            Order deleted successfully.
+        </p>
+        {%endif%}
+
         <div class='wishes'>
             {% if cartItems.length > 0 %}
             <div class='wishes'>

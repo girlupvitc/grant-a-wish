@@ -2,7 +2,7 @@ import { Database } from 'better-sqlite3';
 import { NextFunction, Request, Response } from 'express';
 import { getAuthUrl } from '../gauth';
 import { getUserInfo, getWishCount, getWishes } from '../queries';
-import { Config, isAdmin } from '../utils';
+import { clearFlashes, Config, isAdmin, mapFlashes } from '../utils';
 
 const toArray = (number: number) => {
     return number.toString().split('');
@@ -15,18 +15,23 @@ const homepage = (req: Request, res: Response, next: NextFunction) => {
     req.session.lastPage = 'home';
     const wishCount = getWishCount(db);
 
+    const filters = {
+        min: parseInt(req.query['price-min'] as string),
+        max: parseInt(req.query['price-max'] as string)
+    }
+
     res.render('index', {
-        wishes: getWishes(db, {
-            min: parseInt(req.query['price-min'] as string),
-            max: parseInt(req.query['price-max'] as string)
-        }),
-        filtered: typeof req.query['price-min'] === 'string' || typeof req.query['price-max'] === 'string',
-        user: getUserInfo(db, req.session.username),
         authUrl: getAuthUrl(config),
         admin: isAdmin(config, req.session.username),
+        filtered: !!(filters.min || filters.max),
+        user: getUserInfo(db, req.session.username),
         wishCount,
-        wishCountArray: toArray(wishCount)
+        wishCountArray: toArray(wishCount),
+        wishes: getWishes(db, filters),
+        ...mapFlashes(req.session.flash, ['orderDeleted'])
     });
+
+    clearFlashes(req.session.flash, ['orderDeleted']);
 }
 
 export default homepage;
