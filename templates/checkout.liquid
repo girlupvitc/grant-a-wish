@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>One Simple Wish - Checkout</title>
+    <title>GU Grant a Wish - Checkout</title>
 
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/index.css">
@@ -65,7 +65,7 @@
                     key: "{{ config.RAZORPAY_KEY_ID }}",
                     currency: "INR",
                     amount: "{{ subTotal }}",
-                    name: "GirlUp One Simple Wish",
+                    name: "GU Grant A Wish",
                     order_id: "{{ razorpayId }}",
                     handler: async (res) => {
                         const result = await postJson('/payment', {

@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 export interface Config {
-    OSW_SECRET: string,
+    SECRET: string,
     PORT?: number,
     ADMINS: string[],
     GOAUTH_CLIENT_ID: string,
@@ -36,7 +36,7 @@ export const isAdmin = (config: Config, username: string) => {
 export const getConfig = () => {
     try {
         const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
-        ['OSW_SECRET',
+        ['SECRET',
             'ADMINS',
             'GOAUTH_CLIENT_ID',
             'GOAUTH_CLIENT_SECRET',

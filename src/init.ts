@@ -42,7 +42,7 @@ const initSessions = (app: express.Express) => {
     sessionDb.pragma('journal_mode = WAL');
 
     app.use(sessions({
-        secret: config.OSW_SECRET,
+        secret: config.SECRET,
         resave: false,
         saveUninitialized: false,
         store: new SqliteStore({

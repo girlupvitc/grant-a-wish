@@ -1,5 +1,5 @@
 {
-  "name": "one-simple-wish",
+  "name": "gu-grant-a-wish",
   "version": "1.0.0",
   "description": "",
   "main": "src/main.ts",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/girlupvitc/one-simple-wish.git"
+    "url": "git+https://github.com/girlupvitc/gu-grant-a-wish.git"
   },
   "author": "Siddharth Singh",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/girlupvitc/one-simple-wish/issues"
+    "url": "https://github.com/girlupvitc/gu-grant-a-wish/issues"
   },
-  "homepage": "https://github.com/girlupvitc/one-simple-wish#readme",
+  "homepage": "https://github.com/girlupvitc/gu-grant-a-wish#readme",
   "dependencies": {
     "better-sqlite3": "^7.4.6",
     "better-sqlite3-session-store": "^0.0.2",
