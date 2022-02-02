@@ -15,7 +15,7 @@ The application can be configured with the following options in `config.json`:
 - `GOAUTH_CLIENT_SECRET`*: The Google OAuth client secret the app will use for
   authentication.
 - `GOAUTH_CLIENT_ID`*: The Google OAuth ID the app will use for authentication.
-- `GOAUTH_REDIRECT_URI`: Should be set to `&lt;hosting_url&gt;/auth/google`.
+- `GOAUTH_REDIRECT_URI`: Should be set to `<hosting_url>/auth/google`.
 - `SECRET`: The string to use as the session signing secret.
 - `RAZORPAY_KEY_ID`: Should be set to the value obtained from the Razorpay
   dashboard.

@@ -76,6 +76,12 @@
 
         {% unless user.isCheckingOut %}
         <h2>Wishes</h2>
+        {% unless user %}
+        <p>
+            You can browse wishes without logging in; however, to make a purchase, you will need to <a
+                href='{{ authUrl }}'>log in</a>.
+        </p>
+        {% endunless %}
         <details id='wishes-filter' {% if filtered%} open {% endif %}>
             <summary>Filter</summary>
             <div class='details-body'>
@@ -118,6 +124,7 @@
                     </div>
 
                     <div class='wish-actions'>
+                        {% if user %}
                         {% if user.cart contains wish.uuid %}
                         <a class='button' href='/cart/remove/{{ wish.uuid }}'>
                             Remove from cart
@@ -126,6 +133,7 @@
                         <a class='button' href='/cart/add/{{ wish.uuid }}'>
                             Add to cart
                         </a>
+                        {% endif %}
                         {% endif %}
 
                         <a class='button' href='/wishes/{{ wish.uuid }}'>
